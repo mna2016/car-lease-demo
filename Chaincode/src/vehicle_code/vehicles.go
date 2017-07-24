@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
-	"strings"
+	//"strings"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"encoding/json"
 	"regexp"
@@ -61,6 +61,7 @@ type Vehicle struct {
 }
 
 type Temp1 struct {
+    V5cid           string `json:"v5cID"`
 	Make            string `json:"make"`
 
 }
@@ -88,7 +89,7 @@ type User_and_eCert struct {
 //==============================================================================================================================
 //	Init Function - Called when the user deploys the chaincode
 //==============================================================================================================================
-func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string, args Temp1) ([]byte, error) {
 
 	//Args
 	//				0
@@ -102,10 +103,10 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string
     if err != nil { return nil, errors.New("Error creating V5C_Holder record") }
 
 	err = stub.PutState("v5cIDs", bytes)
-
-	for i:=0; i < len(args); i=i+2 {
-		t.add_ecert(stub, args[i], args[i+1])
-	}
+//
+//	for i:=0; i < len(args); i=i+2 {
+//		t.add_ecert(stub, args[i], args[i+1])
+//	}
 
 	return nil, nil
 }
@@ -241,7 +242,7 @@ func (t *SimpleChaincode) save_changes(stub shim.ChaincodeStubInterface, v Vehic
 
 
 	if function == "create_vehicle" {
-        return t.create_vehicle(stub, "DVLA", AUTHORITY, args[0])
+        return t.create_vehicle(stub, "DVLA", AUTHORITY, "args[0]")
         //return t.create_vehicle(stub, caller, caller_affiliation, args[0])
 	
     } else if function == "ping" {
@@ -253,8 +254,9 @@ func (t *SimpleChaincode) save_changes(stub shim.ChaincodeStubInterface, v Vehic
 			argPos = 0
 		}
 
-		v, err := t.retrieve_v5c(stub, args[argPos])
-
+		//v, err := t.retrieve_v5c(stub, args[argPos])
+        v, err := t.retrieve_v5c(stub, args.V5cid)
+        
         if err != nil { fmt.Printf("INVOKE: Error retrieving v5c: %s", err); return nil, errors.New("Error retrieving v5c") }
     }
 
@@ -280,7 +282,7 @@ func (t *SimpleChaincode) save_changes(stub shim.ChaincodeStubInterface, v Vehic
 //		return nil, errors.New("Function of the name "+ function +" doesn't exist.")
 //
 //	}
-
+         return nil, errors.New("Nil")
     }
 //=================================================================================================================================
 //	Query - Called on chaincode query. Takes a function name passed and calls that function. Passes the
@@ -671,7 +673,7 @@ func (t *SimpleChaincode) update_make(stub shim.ChaincodeStubInterface, v Vehicl
 	return nil, nil
 
 }
-
+                                  
 //=================================================================================================================================
 //	 update_model
 //=================================================================================================================================
