@@ -231,8 +231,8 @@ func (t *SimpleChaincode) save_changes(stub shim.ChaincodeStubInterface, v Vehic
 //	Invoke - Called on chaincode invoke. Takes a function name passed and calls that function. Converts some
 //		  initial arguments passed to other things for use in the called function e.g. name -> ecert
 //==============================================================================================================================
-func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
- 
+//func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function string, args Temp1) ([]byte, error) {
     errors.New("$$ INVOKE CALLED $$")
     
 	caller, caller_affiliation, err := t.get_caller_data(stub)
@@ -260,7 +260,8 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 
         if strings.Contains(function, "update") == false && function != "scrap_vehicle"    { 									// If the function is not an update or a scrappage it must be a transfer so we need to get the ecert of the recipient.
 
-
+        if function == "update_make"  	    { return t.update_make(stub, v, caller, caller_affiliation, args)
+            /*
 				if 		   function == "authority_to_manufacturer" { return t.authority_to_manufacturer(stub, v, caller, caller_affiliation, args[0], "manufacturer")
 				} else if  function == "manufacturer_to_private"   { return t.manufacturer_to_private(stub, v, caller, caller_affiliation, args[0], "private")
 				} else if  function == "private_to_private" 	   { return t.private_to_private(stub, v, caller, caller_affiliation, args[0], "private")
@@ -274,7 +275,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 		} else if function == "update_reg" { return t.update_registration(stub, v, caller, caller_affiliation, args[0])
 		} else if function == "update_vin" 			{ return t.update_vin(stub, v, caller, caller_affiliation, args[0])
         } else if function == "update_colour" 		{ return t.update_colour(stub, v, caller, caller_affiliation, args[0])
-		} else if function == "scrap_vehicle" 		{ return t.scrap_vehicle(stub, v, caller, caller_affiliation) }
+		} else if function == "scrap_vehicle" 		{ return t.scrap_vehicle(stub, v, caller, caller_affiliation) } */
 
 		return nil, errors.New("Function of the name "+ function +" doesn't exist.")
 
