@@ -226,8 +226,8 @@ func (t *SimpleChaincode) save_changes(stub shim.ChaincodeStubInterface, v Vehic
 //		  initial arguments passed to other things for use in the called function e.g. name -> ecert
 //==============================================================================================================================
 func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
-
-    fmt.Printf("$$ Invoke called")
+ 
+    errors.New("$$ INVOKE CALLED $$")
     
 	caller, caller_affiliation, err := t.get_caller_data(stub)
 
@@ -277,7 +277,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 //  		initial arguments passed are passed on to the called function.
 //=================================================================================================================================
 func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
-    fmt.Printf("$$ Query called")
+    errors.New("$$ QUERY CALLED $$")
 	caller, caller_affiliation, err := t.get_caller_data(stub)
 	if err != nil { fmt.Printf("QUERY: Error retrieving caller details", err); return nil, errors.New("QUERY: Error retrieving caller details: "+err.Error()) }
 
