@@ -231,7 +231,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
     
 	caller, caller_affiliation, err := t.get_caller_data(stub)
 
-	//if err != nil { return nil, errors.New("Error retrieving caller information")}
+	if err != nil { fmt.Printf("Error retrieving caller information")}
 
 
 	if function == "create_vehicle" {
