@@ -60,6 +60,12 @@ type Vehicle struct {
 	LeaseContractID string `json:"leaseContractID"`
 }
 
+type Temp1 struct {
+	Make            string `json:"make"`
+
+}
+
+
 
 //==============================================================================================================================
 //	V5C Holder - Defines the structure that holds all the v5cIDs for vehicles that have been created.
@@ -640,7 +646,7 @@ func (t *SimpleChaincode) update_colour(stub shim.ChaincodeStubInterface, v Vehi
 //=================================================================================================================================
 //	 update_make
 //=================================================================================================================================
-func (t *SimpleChaincode) update_make(stub shim.ChaincodeStubInterface, v Vehicle, caller string, caller_affiliation string, new_value string) ([]byte, error) {
+func (t *SimpleChaincode) update_make(stub shim.ChaincodeStubInterface, v Vehicle, caller string, caller_affiliation string, args Temp1) ([]byte, error) {
 
 	/*if 		v.Status			== STATE_MANUFACTURE	&&
 			v.Owner				== caller				&&
@@ -655,7 +661,7 @@ func (t *SimpleChaincode) update_make(stub shim.ChaincodeStubInterface, v Vehicl
 
 	}*/
     
-    v.Make = args.make;
+    v.Make = args.Make;
 	_, err := t.save_changes(stub, v)
 
 															if err != nil { fmt.Printf("UPDATE_MAKE: Error saving changes: %s", err); return nil, errors.New("Error saving changes") }
