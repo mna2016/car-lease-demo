@@ -231,6 +231,13 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 	//if err != nil { return nil, errors.New("Error retrieving caller information")}
     if err != nil { fmt.Printf("Error retrieving caller information")}
 
+    
+    // Get the args from the transaction proposal
+      Args := stub.GetStringArgs()
+     // if len(args) != 2 {
+     //   return nil("Incorrect arguments. Expecting a key and a value")
+      //}
+    errors.New(fmt.Sprintf("Input Arguments are: %v", Args.make)
 
 	if function == "create_vehicle" {
         return t.create_vehicle(stub, "DVLA", AUTHORITY, args[0])
