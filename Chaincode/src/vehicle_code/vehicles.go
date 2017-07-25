@@ -250,7 +250,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 		fmt.Println("error:", err2)
 	}
     
-    fmt.Println("Input Arguments are: %v", animals))
+    fmt.Println("Input Arguments are: %v", animals)
 
 	if function == "create_vehicle" {
         return t.create_vehicle(stub, "DVLA", AUTHORITY, args[0])
