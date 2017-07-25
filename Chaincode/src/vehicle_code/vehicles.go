@@ -246,7 +246,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 		Make   string
 	}
 	var animals Animal
-    err2 := json.Unmarshal(byte1[0], &animals)
+    err2 := json.Unmarshal(byte1, &animals)
 	if err2 != nil {
 		fmt.Println("error:", err2)
 	}
