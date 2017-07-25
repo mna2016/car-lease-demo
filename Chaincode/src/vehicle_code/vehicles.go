@@ -237,7 +237,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
      // if len(args) != 2 {
      //   return nil("Incorrect arguments. Expecting a key and a value")
       //}
-    errors.New(fmt.Sprintf("Input Arguments are: %v", Args.make)
+    errors.New(fmt.Sprintf("Input Arguments are: %v", Args.make))
 
 	if function == "create_vehicle" {
         return t.create_vehicle(stub, "DVLA", AUTHORITY, args[0])
