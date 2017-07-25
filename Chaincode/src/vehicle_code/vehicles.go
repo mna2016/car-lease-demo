@@ -234,10 +234,23 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
     
     // Get the args from the transaction proposal
       Args := stub.GetStringArgs()
+    byte1,err1:= stub.GetArgsSlice() ([]byte, error)
+    if (err1 != nil) {fmt.Printf("No error")}
      // if len(args) != 2 {
      //   return nil("Incorrect arguments. Expecting a key and a value")
       //}
-    errors.New(fmt.Sprintf("Input Arguments are: %v", Args))
+    
+    type Animal struct {
+		V5cid  string
+		Make   string
+	}
+	var animals []Animal
+    err2 := json.Unmarshal(byte1, &animals)
+	if err2 != nil {
+		fmt.Println("error:", err2)
+	}
+    
+    fmt.Println("Input Arguments are: %v", animals))
 
 	if function == "create_vehicle" {
         return t.create_vehicle(stub, "DVLA", AUTHORITY, args[0])
