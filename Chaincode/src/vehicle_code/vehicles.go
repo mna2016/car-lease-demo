@@ -252,6 +252,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 	}
     
     fmt.Println("Input Arguments are: %v", animals)
+    return nil, errors.New("animals struct=>"+animals+"<")
 
 	if function == "create_vehicle" {
         return t.create_vehicle(stub, "DVLA", AUTHORITY, animals.V5cid)
@@ -360,7 +361,7 @@ func (t *SimpleChaincode) create_vehicle(stub shim.ChaincodeStubInterface, calle
 	if 				v5c_ID  == "" 	 ||
 					matched == false    {
 																		fmt.Printf("CREATE_VEHICLE: Invalid v5cID provided");
-																		return nil, errors.New("Invalid v5cID provided")
+																		return nil, errors.New("Invalid v5cID provided=>"+v5cID+"<")
 	}
 
 	err = json.Unmarshal([]byte(vehicle_json), &v)							// Convert the JSON defined above into a vehicle object for go
