@@ -60,7 +60,11 @@ type Vehicle struct {
 	LeaseContractID string `json:"leaseContractID"`
 }
 
-
+type Animal struct {
+		V5cid  string `json:"v5cID"`
+		Make   string `json:"make"`
+	}
+	
 //==============================================================================================================================
 //	V5C Holder - Defines the structure that holds all the v5cIDs for vehicles that have been created.
 //				Used as an index when querying all vehicles.
@@ -243,18 +247,14 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
      //   return nil("Incorrect arguments. Expecting a key and a value")
       //}
     
-    type Animal struct {
-		V5cid  string `json:"v5cID"`
-		Make   string `json:"make"`
-	}
-	var animals Animal
+    var animals Animal
     err2 := json.Unmarshal([]byte(Args[1]), &animals)
 	if err2 != nil {
 		fmt.Println("error:", err2)
 	}
     
     //fmt.Println("Input Arguments are: %v", animals)
-    return nil, errors.New("animals struct :"+ animals.V5cid + ":" + animals.Make + ":")
+    //return nil, errors.New("animals struct :"+ animals.V5cid + ":" + animals.Make + ":")
 
 	if function == "create_vehicle" {
         return t.create_vehicle(stub, "DVLA", AUTHORITY, animals.V5cid)
@@ -306,18 +306,29 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
     logger.Debug("function: ", function)
     logger.Debug("caller: ", caller)
     logger.Debug("affiliation: ", caller_affiliation)
+    caller = "DVLA"
+    caller_affiliation = AUTHORITY
+    // Get the args from the transaction proposal
+    Args := stub.GetStringArgs()
+    var animals Animal
+    err2 := json.Unmarshal([]byte(Args[1]), &animals)
+	if err2 != nil {
+		fmt.Println("error:", err2)
+	}
+    
+    
 
 	if function == "get_vehicle_details" {
 		if len(args) != 1 { fmt.Printf("Incorrect number of arguments passed"); return nil, errors.New("QUERY: Incorrect number of arguments passed") }
-		v, err := t.retrieve_v5c(stub, args[0])
+		v, err := t.retrieve_v5c(stub, animals.V5cid)
 		if err != nil { fmt.Printf("QUERY: Error retrieving v5c: %s", err); return nil, errors.New("QUERY: Error retrieving v5c "+err.Error()) }
 		return t.get_vehicle_details(stub, v, caller, caller_affiliation)
 	} else if function == "check_unique_v5c" {
-		return t.check_unique_v5c(stub, args[0], caller, caller_affiliation)
+		return t.check_unique_v5c(stub, animals.V5cid, caller, caller_affiliation)
 	} else if function == "get_vehicles" {
 		return t.get_vehicles(stub, caller, caller_affiliation)
 	} else if function == "get_ecert" {
-		return t.get_ecert(stub, args[0])
+		return t.get_ecert(stub,animals.V5cid)
 	} else if function == "ping" {
 		return t.ping(stub)
 	}
