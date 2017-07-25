@@ -236,7 +236,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
       //Args := stub.GetStringArgs()
     //byte1,err1:= stub.GetArgsSlice()
     byte1:= stub.GetArgs()
-    if (err1 != nil) {fmt.Printf("No error")}
+    //if (err1 != nil) {fmt.Printf("No error")}
      // if len(args) != 2 {
      //   return nil("Incorrect arguments. Expecting a key and a value")
       //}
@@ -246,7 +246,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 		Make   string
 	}
 	var animals []Animal
-    err2 := json.Unmarshal(byte1, &animals)
+    err2 := json.Unmarshal(byte1[0], &animals)
 	if err2 != nil {
 		fmt.Println("error:", err2)
 	}
