@@ -245,7 +245,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 		V5cid  string
 		Make   string
 	}
-	var animals []Animal
+	var animals Animal
     err2 := json.Unmarshal(byte1[0], &animals)
 	if err2 != nil {
 		fmt.Println("error:", err2)
@@ -254,7 +254,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
     fmt.Println("Input Arguments are: %v", animals)
 
 	if function == "create_vehicle" {
-        return t.create_vehicle(stub, "DVLA", AUTHORITY, args[0])
+        return t.create_vehicle(stub, "DVLA", AUTHORITY, animals.V5cid)
 	} else if function == "ping" {
         return t.ping(stub)
     } else { 																				// If the function is not a create then there must be a car so we need to retrieve the car.
