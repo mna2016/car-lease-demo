@@ -233,8 +233,8 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 
     
     // Get the args from the transaction proposal
-      Args := stub.GetStringArgs()
-    byte1,err1:= stub.GetArgsSlice() ([]byte, error)
+      //Args := stub.GetStringArgs()
+    byte1,err1:= stub.GetArgsSlice()
     if (err1 != nil) {fmt.Printf("No error")}
      // if len(args) != 2 {
      //   return nil("Incorrect arguments. Expecting a key and a value")
