@@ -288,7 +288,8 @@ func (t *SimpleChaincode) save_changes(stub shim.ChaincodeStubInterface, v Vehic
 //	Query - Called on chaincode query. Takes a function name passed and calls that function. Passes the
 //  		initial arguments passed are passed on to the called function.
 //=================================================================================================================================
-func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+//func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function string, args Temp1) ([]byte, error) {
     errors.New("$$ QUERY CALLED $$")
 	caller, caller_affiliation, err := t.get_caller_data(stub)
 	if err != nil { fmt.Printf("QUERY: Error retrieving caller details", err); return nil, errors.New("QUERY: Error retrieving caller details: "+err.Error()) }
@@ -296,7 +297,7 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
     logger.Debug("function: ", function)
     logger.Debug("caller: ", caller)
     logger.Debug("affiliation: ", caller_affiliation)
-
+/*
 	if function == "get_vehicle_details" {
 		if len(args) != 1 { fmt.Printf("Incorrect number of arguments passed"); return nil, errors.New("QUERY: Incorrect number of arguments passed") }
 		v, err := t.retrieve_v5c(stub, args[0])
@@ -311,7 +312,7 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 	} else if function == "ping" {
 		return t.ping(stub)
 	}
-
+*/
 	return nil, errors.New("Received unknown function invocation " + function)
 
 }
