@@ -237,7 +237,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
     //byte1,err1:= stub.GetArgsSlice()
     //byte1:= stub.GetArgs()
     
-    var jsonBlob = []byte(stub.GetArgs())
+    var jsonBlob = [][]byte(stub.GetArgs())
     //if (err1 != nil) {fmt.Printf("No error")}
      // if len(args) != 2 {
      //   return nil("Incorrect arguments. Expecting a key and a value")
