@@ -237,23 +237,23 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
     //byte1,err1:= stub.GetArgsSlice()
     
     //byte1:= stub.GetArgs()
-    return nil, errors.New("animals struct :"+ Args[0] + ":" + Args[1] + ":" + Args[2])
+    
     //if (err1 != nil) {fmt.Printf("No error")}
      // if len(args) != 2 {
      //   return nil("Incorrect arguments. Expecting a key and a value")
       //}
     
     type Animal struct {
-		V5cid  string
-		Make   string
+		V5cid  string `json:"v5cID"`
+		Make   string `json:"make"`
 	}
 	var animals Animal
-  //  err2 := json.Unmarshal("", &animals)
-//	if err2 != nil {
-		//fmt.Println("error:", err2)
-	//}
+    err2 := json.Unmarshal([]byte(Args[1]), &animals)
+	if err2 != nil {
+		fmt.Println("error:", err2)
+	}
     
-    fmt.Println("Input Arguments are: %v", animals)
+    //fmt.Println("Input Arguments are: %v", animals)
     return nil, errors.New("animals struct :"+ animals.V5cid + ":" + animals.Make + ":")
 
 	if function == "create_vehicle" {
