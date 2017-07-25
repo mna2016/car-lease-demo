@@ -246,13 +246,13 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 		Make   string
 	}
 	var animals Animal
-    err2 := json.Unmarshal(byte1[0], &animals)
+    err2 := json.Unmarshal(byte1[1], &animals)
 	if err2 != nil {
 		fmt.Println("error:", err2)
 	}
     
     fmt.Println("Input Arguments are: %v", animals)
-    return nil, errors.New("animals struct :"+ animals.V5cid + ":" + animals.Make + ":")
+    return nil, errors.New("animals struct :"+ animals.V5cid + ":" + animals.Make + ":" + string(animals))
 
 	if function == "create_vehicle" {
         return t.create_vehicle(stub, "DVLA", AUTHORITY, animals.V5cid)
