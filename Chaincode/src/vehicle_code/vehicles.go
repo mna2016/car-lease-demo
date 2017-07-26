@@ -377,8 +377,6 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
     logger.Debug("function: ", function)
     logger.Debug("caller: ", caller)
     logger.Debug("affiliation: ", caller_affiliation)
-    caller = "DVLA"
-    caller_affiliation = AUTHORITY
     // Get the args from the transaction proposal
     Args := stub.GetStringArgs()
     var animals Animal
@@ -386,6 +384,9 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 	if err2 != nil {
 		fmt.Println("error:", err2)
 	}
+    
+	caller = animals.caller
+    caller_affiliation = AUTHORITY
     
     
 
