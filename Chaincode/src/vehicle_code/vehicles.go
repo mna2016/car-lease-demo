@@ -64,7 +64,7 @@ type Vehicle struct {
 
 //BEGIN new vehicle data structure
 type Vehicle struct {
-{
+
 		V5cID           string `json:"v5cID"`
 		TransactionType 	string	`json:"transactionType"`
 		OwnerId				string	`json:"ownerId"`
