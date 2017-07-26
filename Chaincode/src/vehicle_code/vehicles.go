@@ -3,7 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
-	"strconv"
+//	"strconv"
 	"strings"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"encoding/json"
@@ -353,10 +353,11 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 		} else*/ 
 				if function == "updateAsset" 		{ return t.updateAsset(stub, v, caller, caller_affiliation,"dummy new value",animals) }
 
-		return nil, errors.New("Function of the name "+ function +" doesn't exist.")
+		
+	}
+	}
+	return nil, errors.New("Function of the name "+ function +" doesn't exist.")
 
-	}
-	}
 }
 //=================================================================================================================================
 //	Query - Called on chaincode query. Takes a function name passed and calls that function. Passes the
@@ -598,13 +599,13 @@ func (t *SimpleChaincode) updateAsset(stub shim.ChaincodeStubInterface, v Vehicl
 					if	animals.AfDmaTest				!= ""	{ v.AfDmaTest = animals.AfDmaTest				}
 					if 	animals.DmaDelCert				!= "" 	{ v.DmaDelCert = animals.DmaDelCert				}	
 					if	animals.AfDoc					!= "" 	{ v.AfDoc = animals.AfDoc						}
-					if	animals.Make					!= "" 	{ v.Make = animals.Make							}            	
+					//if	animals.Make					!= "" 	{ v.Make = animals.Make							}            	
 					if 	animals.Caller					!= ""	{ v.Caller = animals.Caller						}
 
 
 			} else {
 
-		return nil, errors.New(fmt.Sprint("Permission denied. updateAsset %t %t %t" + v.Owner == caller, caller_affiliation == MANUFACTURER, v.Scrapped))
+		return nil, errors.New(fmt.Sprint("Permission denied. updateAsset %t %t" + v.OwnerId == caller, caller_affiliation == MANUFACTURER))
 	}
 			v.AssetId = v.V5cID	//assetId and v5cid are the same thing. 					
 
@@ -953,7 +954,7 @@ func (t *SimpleChaincode) get_vehicle_details(stub shim.ChaincodeStubInterface, 
 
 																if err != nil { return nil, errors.New("GET_VEHICLE_DETAILS: Invalid vehicle object") }
 
-	if 		v.Owner				== caller		||
+	if 		v.OwnerId				== caller		||
 			caller_affiliation	== AUTHORITY	{
 
 					return bytes, nil
