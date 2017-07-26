@@ -43,6 +43,7 @@ const   STATE_BEING_SCRAPPED  		=  4
 type  SimpleChaincode struct {
 }
 
+/* Vehicle structure commented out 
 //==============================================================================================================================
 //	Vehicle - Defines the structure for a car object. JSON on right tells it what JSON fields to map to
 //			  that element when reading a JSON object into the struct e.g. JSON make -> Struct Make.
@@ -59,10 +60,12 @@ type Vehicle struct {
 	V5cID           string `json:"v5cID"`
 	LeaseContractID string `json:"leaseContractID"`
 }
+*/
 
 //BEGIN new vehicle data structure
-/* type Vehicle struct {
+type Vehicle struct {
 {
+		V5cID           string `json:"v5cID"`
 		TransactionType 	string	`json:"transactionType"`
 		OwnerId				string	`json:"ownerId"`
 		AssetId				string	`json:"assetId"`
@@ -84,7 +87,7 @@ type Vehicle struct {
 		AfDoc				string	`json:"afDoc"`
 		Caller				string  `json:"caller"`
 }  
-*/
+
 //END new vehicle Data Structure
 
 
