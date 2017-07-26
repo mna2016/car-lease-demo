@@ -82,6 +82,7 @@ type Vehicle struct {
 		AfDmaTest			string	`json:"afDmaTest"`
 		DmaDelCert			string	`json:"dmaDelCert"`
 		AfDoc				string	`json:"afDoc"`
+		Caller				string  `json:"caller"`
 }  
 */
 //END new vehicle Data Structure
@@ -111,7 +112,7 @@ type Animal struct {
 		AfDoc				string	`json:"afDoc"`
 		Make            string `json:"make"`
 		V5cid           string `json:"v5cID"`
-
+		Caller				string  `json:"caller"`		//the UI/person who fired the transaction
 	}
 	
 //==============================================================================================================================
@@ -307,7 +308,10 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 
 	if function == "create_vehicle" {
         return t.create_vehicle(stub, "DVLA", AUTHORITY, animals.V5cid)
-	} else if function == "ping" {
+	} else if function == "createAsset" {
+		return t.createAsset(stub, "DVLA", AUTHORITY, animals.V5cid)
+    } 
+	else if function == "ping" {
         return t.ping(stub)
     } else { 																				// If the function is not a create then there must be a car so we need to retrieve the car.
 		argPos := 1
@@ -367,7 +371,7 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
     
     
 
-	if function == "get_vehicle_details" {
+	if function == "get_vehicle_details" || function == "readAsset"  {
 		if len(args) != 1 { fmt.Printf("Incorrect number of arguments passed"); return nil, errors.New("QUERY: Incorrect number of arguments passed") }
 		v, err := t.retrieve_v5c(stub, animals.V5cid)
 		if err != nil { fmt.Printf("QUERY: Error retrieving v5c: %s", err); return nil, errors.New("QUERY: Error retrieving v5c "+err.Error()) }
@@ -468,6 +472,93 @@ func (t *SimpleChaincode) create_vehicle(stub shim.ChaincodeStubInterface, calle
 	return nil, nil
 
 }
+
+//=================================================================================================================================
+//	 Create Vehicle - Creates the initial JSON for the vehcile and then saves it to the ledger.
+//=================================================================================================================================
+func (t *SimpleChaincode) createAsset(stub shim.ChaincodeStubInterface, caller string, caller_affiliation string, v5cID string) ([]byte, error) {
+	var v Vehicle
+
+	//Initialize variables which will make up the JSON structure that will be written to world state
+		TransactionType 	:= "\"transactionType\":\"UNDEFINED\", "
+		OwnerId				:= "\"ownerId\":\""+caller+"\", "
+		AssetId				:= "\"assetId\":\""+v5cID+"\", "
+		MatnrAf				:= "\"matnrAf\":\"UNDEFINED\", "
+		PoDma				:= "\"poDma\":\"UNDEFINED\", "
+		PoSupp				:= "\"poSupp\":\"UNDEFINED\", "
+		DmaDelDate			:= "\"dmaDelDate\":\"UNDEFINED\", "
+		AfDelDate			:= "\"afDelDate\":\"UNDEFINED\", "
+		TruckMod			:= "\"truckMod\":\"UNDEFINED\", "
+		TruckPDate			:= "\"truckPdate\":\"UNDEFINED\", "
+		TruckChnum			:= "\"truckChnum\":\"UNDEFINED\", "
+		TruckEnnum			:= "\"truckEnnum\":\"UNDEFINED\", "
+		SuppTest			:= "\"suppTest\":\"UNDEFINED\", "
+		GrDma				:= "\"grDma\":\"UNDEFINED\", "
+		GrAf				:= "\"grAf\":\"UNDEFINED\", "
+		DmaMasdat			:= "\"dmaMasdat\":\"UNDEFINED\", "
+		AfDmaTest			:= "\"afDmaTest\":\"UNDEFINED\", "
+		DmaDelCert			:= "\"dmaDelCert\":\"UNDEFINED\", "
+		AfDoc				:= "\"afDoc\":\"UNDEFINED\", "
+		Caller				:= "\"caller\":\"UNDEFINED\" "
+		v5c_ID         		:= "\"v5cID\":\""+v5cID+"\", "							// Variables to define the JSON
+
+
+
+	vehicle_json := "{"+v5c_ID+TransactionType+OwnerId+AssetId+MatnrAf+PoDma+PoSupp+DmaDelDate+AfDelDate+TruckMod+TruckPDate+TruckChnum+TruckEnnum+SuppTest+GrDma+GrAf+DmaMasdat+AfDmaTest+DmaDelCert+AfDoc+Caller+"}" 	// Concatenates the variables to create the total JSON object
+
+	matched, err := regexp.Match("^[A-z][A-z][0-9]{7}", []byte(v5cID))  				// matched = true if the v5cID passed fits format of two letters followed by seven digits
+
+												if err != nil { fmt.Printf("CREATE_VEHICLE: Invalid v5cID: %s", err); return nil, errors.New("Invalid v5cID") }
+
+	if 				v5c_ID  == "" 	 ||
+					matched == false    {
+																		fmt.Printf("CREATE_VEHICLE: Invalid v5cID provided");
+																		return nil, errors.New("Invalid v5cID provided=>"+v5cID+"<")
+	}
+
+	err = json.Unmarshal([]byte(vehicle_json), &v)							// Convert the JSON defined above into a vehicle object for go
+
+																		if err != nil { return nil, errors.New("Invalid JSON object") }
+
+	record, err := stub.GetState(v.V5cID) 								// If not an error then a record exists so cant create a new car with this V5cID as it must be unique
+
+																		if record != nil { return nil, errors.New("Vehicle already exists") }
+
+	if 	caller_affiliation != AUTHORITY {							// Only the regulator can create a new v5c
+
+		return nil, errors.New(fmt.Sprintf("Permission Denied. create_vehicle. %v === %v", caller_affiliation, AUTHORITY))
+
+	}
+
+	_, err  = t.save_changes(stub, v)
+
+																		if err != nil { fmt.Printf("CREATE_VEHICLE: Error saving changes: %s", err); return nil, errors.New("Error saving changes") }
+
+	bytes, err := stub.GetState("v5cIDs")
+
+																		if err != nil { return nil, errors.New("Unable to get v5cIDs") }
+
+	var v5cIDs V5C_Holder
+
+	err = json.Unmarshal(bytes, &v5cIDs)
+
+																		if err != nil {	return nil, errors.New("Corrupt V5C_Holder record") }
+
+	v5cIDs.V5Cs = append(v5cIDs.V5Cs, v5cID)
+
+
+	bytes, err = json.Marshal(v5cIDs)
+
+															if err != nil { fmt.Print("Error creating V5C_Holder record") }
+
+	err = stub.PutState("v5cIDs", bytes)
+
+															if err != nil { return nil, errors.New("Unable to put the state") }
+
+	return nil, nil
+
+}
+
 
 //=================================================================================================================================
 //	 Transfer Functions
