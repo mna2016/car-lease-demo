@@ -17,6 +17,12 @@ var logger = shim.NewLogger("CLDChaincode")
 //						 user's eCert
 //==============================================================================================================================
 //CURRENT WORKAROUND USES ROLES CHANGE WHEN OWN USERS CAN BE CREATED SO THAT IT READ 1, 2, 3, 4, 5
+const REGULATOR			=  "REG"
+const   AF      		=  "AF "
+const   DMA     		=  "DMA"
+const   SUPPLIER      	=  "SUP"
+const   TRANSPORTER     =  "TRP"
+
 const   AUTHORITY      =  "regulator"
 const   MANUFACTURER   =  "manufacturer"
 const   PRIVATE_ENTITY =  "private"
@@ -493,7 +499,7 @@ func (t *SimpleChaincode) createAsset(stub shim.ChaincodeStubInterface, caller s
 
 	//Initialize variables which will make up the JSON structure that will be written to world state
 		TransactionType 	:= "\"transactionType\":\"UNDEFINED\", "
-		OwnerId				:= "\"ownerId\":\""+caller+"\", "
+		OwnerId				:= "\"ownerId\":\""+REGULATOR+"\", "			//owner at the time of creation is always regulator
 		AssetId				:= "\"assetId\":\""+v5cID+"\", "
 		MatnrAf				:= "\"matnrAf\":\"UNDEFINED\", "
 		PoDma				:= "\"poDma\":\"UNDEFINED\", "
