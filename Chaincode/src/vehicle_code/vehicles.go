@@ -337,7 +337,8 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 			argPos = 0
 		}
 
-		v, err := t.retrieve_v5c(stub, args[argPos])
+		//v, err := t.retrieve_v5c(stub, args[argPos])
+		v, err := t.retrieve_v5c(stub, animals.V5cid)
 
         if err != nil { fmt.Printf("INVOKE: Error retrieving v5c: %s", err); return nil, errors.New("Error retrieving v5c") }
 
