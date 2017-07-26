@@ -75,7 +75,7 @@ type Vehicle struct {
 		DmaDelDate			string	`json:"dmaDelDate"`
 		AfDelDate			string	`json:"afDelDate"`
 		TruckMod			string	`json:"truckMod"`
-		truckPdate			string	`json:"truckPdate"`
+		TruckPDate			string	`json:"truckPdate"`
 		TruckChnum			string	`json:"truckChnum"`
 		TruckEnnum			string	`json:"truckEnnum"`
 		SuppTest			string	`json:"suppTest"`
@@ -116,7 +116,7 @@ type Animal struct {
 		DmaDelDate			string	`json:"dmaDelDate"`
 		AfDelDate			string	`json:"afDelDate"`
 		TruckMod			string	`json:"truckMod"`
-		truckPdate			string	`json:"truckPdate"`
+		TruckPDate			string	`json:"truckPdate"`
 		TruckChnum			string	`json:"truckChnum"`
 		TruckEnnum			string	`json:"truckEnnum"`
 		SuppTest			string	`json:"suppTest"`
@@ -288,6 +288,8 @@ func (t *SimpleChaincode) save_changes(stub shim.ChaincodeStubInterface, v Vehic
 	return true, nil
 }
 
+
+
 //==============================================================================================================================
 //	 Router Functions
 //==============================================================================================================================
@@ -356,7 +358,8 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 		} else if function == "update_reg" { return t.update_registration(stub, v, caller, caller_affiliation, args[0])
 		} else if function == "update_vin" 			{ return t.update_vin(stub, v, caller, caller_affiliation, args[0])
         } else if function == "update_colour" 		{ return t.update_colour(stub, v, caller, caller_affiliation, args[0])
-		} else if function == "scrap_vehicle" 		{ return t.scrap_vehicle(stub, v, caller, caller_affiliation) }
+		} else if function == "scrap_vehicle" 		{ return t.scrap_vehicle(stub, v, caller, caller_affiliation) 
+		} else if function == "update_Asset" 		{ return t.updateAsset(stub, v, caller, caller_affiliation,animals) }
 
 		return nil, errors.New("Function of the name "+ function +" doesn't exist.")
 
@@ -489,7 +492,7 @@ func (t *SimpleChaincode) create_vehicle(stub shim.ChaincodeStubInterface, calle
 }
 
 //=================================================================================================================================
-//	 Create Vehicle - Creates the initial JSON for the vehcile and then saves it to the ledger.
+//	 Create Asset - Creates the initial JSON for the asset and then saves it to the ledger.
 //=================================================================================================================================
 func (t *SimpleChaincode) createAsset(stub shim.ChaincodeStubInterface, caller string, caller_affiliation string, v5cID string) ([]byte, error) {
 	var v Vehicle
@@ -573,6 +576,53 @@ func (t *SimpleChaincode) createAsset(stub shim.ChaincodeStubInterface, caller s
 	return nil, nil
 
 }
+
+//=================================================================================================================================
+//	 Update Asset - Updates the initial JSON for the asset and then saves it to the ledger.
+//=================================================================================================================================
+func (t *SimpleChaincode) updateAsset(stub shim.ChaincodeStubInterface, v Vehicle, caller string, caller_affiliation string, new_value string, animals Animal) ([]byte, error) {
+
+//if the transaction is fired by a person who owns this asset then he has the right to update
+	if 	v.OwnerId == animals.caller		
+				{
+
+					if 	animals.TransactionType			!=nil	{ v.TransactionType = animals.TransactionType 	} 	
+					if	animals.OwnerId 				!= nil	{ v.OwnerId = animals.OwnerId					} 
+				//	if	AssetId							!= nil	{ v.AssetId = animals.AssetId					}
+					if	animals.MatnrAf					!= nil 	{ v.MatnrAf = animals.MatnrAf					}
+					if	animals.PoDma					!= nil	{ v.PoDma = animals.PoDma						}
+					if	animals.PoSupp					!= nil	{ v.PoSupp = animals.PoSupp						}
+					if	animals.DmaDelDate				!= nil	{ v.DmaDelDate = animals.DmaDelDate				}	
+					if	animals.AfDelDate				!= nil 	{ v.AfDelDate = animals.AfDelDate				}
+					if	animals.TruckMod				!= nil	{ v.TruckMod = animals.TruckMod					}
+					if	animals.TruckPDate				!= nil	{ v.TruckPDate = animals.TruckPDate				}
+					if	animals.TruckChnum				!= nil	{ v.TruckChnum = animals.TruckChnum				}	
+					if	animals.TruckEnnum				!= nil	{ v.TruckEnnum = animals.TruckEnnum				}	
+					if	animals.SuppTest				!= nil 	{ v.SuppTest = animals.SuppTest					}
+					if	animals.GrDma					!= nil	{ v.GrDma = animals.GrDma						}
+					if	animals.GrAf					!= nil 	{ v.GrAf = animals.GrAf							}
+					if	animals.DmaMasdat				!= nil	{ v.DmaMasdat = animals.DmaMasdat				}	
+					if	animals.AfDmaTest				!= nil	{ v.AfDmaTest = animals.AfDmaTest				}
+					if 	animals.DmaDelCert				!= nil 	{ v.DmaDelCert = animals.DmaDelCert				}	
+					if	animals.AfDoc					!= nil 	{ v.AfDoc = animals.AfDoc						}
+					if	animals.Make					!= nil 	{ v.Make = animals.Make							}            	
+					if 	animals.Caller					!= nil	{ v.Caller = animals.Caller						}
+
+
+			} else {
+
+		return nil, errors.New(fmt.Sprint("Permission denied. updateAsset %t %t %t" + v.Owner == caller, caller_affiliation == MANUFACTURER, v.Scrapped))
+	}
+
+	_, err := t.save_changes(stub, v)
+
+		if err != nil { fmt.Printf("updateAsset: Error saving changes: %s", err); return nil, errors.New("Error saving changes") }
+
+	return nil, nil
+
+}
+
+
 
 
 //=================================================================================================================================
