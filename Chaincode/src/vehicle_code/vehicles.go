@@ -984,13 +984,13 @@ func (t *SimpleChaincode) get_vehicles(stub shim.ChaincodeStubInterface, caller 
 
 	bytes, err := stub.GetState("v5cIDs")
 
-	if err != nil { return nil, errors.New("Unable to get v5cIDs\assetIds") }
+	if err != nil { return nil, errors.New("Unable to get v5cIDs or assetIds") }
 
 	var v5cIDs V5C_Holder
 
 	err = json.Unmarshal(bytes, &v5cIDs)
 
-	if err != nil {	return nil, errors.New("Corrupt V5C_Holder\AssetID Holder") }
+	if err != nil {	return nil, errors.New("Corrupt V5C_Holder or AssetID Holder") }
 
 	result := "["
 
@@ -1001,7 +1001,7 @@ func (t *SimpleChaincode) get_vehicles(stub shim.ChaincodeStubInterface, caller 
 
 		v, err = t.retrieve_v5c(stub, v5c)
 
-		if err != nil {return nil, errors.New("Failed to retrieve V5C\AssetId")}
+		if err != nil {return nil, errors.New("Failed to retrieve V5C or AssetId")}
 
 		temp, err = t.get_vehicle_details(stub, v, caller, caller_affiliation)
 
@@ -1025,7 +1025,7 @@ func (t *SimpleChaincode) get_vehicles(stub shim.ChaincodeStubInterface, caller 
 func (t *SimpleChaincode) check_unique_v5c(stub shim.ChaincodeStubInterface, v5c string, caller string, caller_affiliation string) ([]byte, error) {
 	_, err := t.retrieve_v5c(stub, v5c)
 	if err == nil {
-		return []byte("false"), errors.New("V5C\AssetId is not unique")
+		return []byte("false"), errors.New("V5C or AssetId is not unique")
 	} else {
 		return []byte("true"), nil
 	}
