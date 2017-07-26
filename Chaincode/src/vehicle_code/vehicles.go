@@ -86,7 +86,7 @@ type Vehicle struct {
 */
 //END new vehicle Data Structure
 
-}
+
 
 //Animal struct for local storage of input arguments read from incoming transaction
 type Animal struct {
@@ -109,7 +109,8 @@ type Animal struct {
 		AfDmaTest			string	`json:"afDmaTest"`
 		DmaDelCert			string	`json:"dmaDelCert"`
 		AfDoc				string	`json:"afDoc"`
-
+		Make            string `json:"make"`
+		V5cID           string `json:"v5cID"`
 
 	}
 	
