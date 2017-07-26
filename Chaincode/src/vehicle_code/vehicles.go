@@ -362,7 +362,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 		} else if function == "update_vin" 			{ return t.update_vin(stub, v, caller, caller_affiliation, args[0])
         } else if function == "update_colour" 		{ return t.update_colour(stub, v, caller, caller_affiliation, args[0])
 		} else if function == "scrap_vehicle" 		{ return t.scrap_vehicle(stub, v, caller, caller_affiliation) 
-		} else if function == "update_Asset" 		{ return t.updateAsset(stub, v, caller, caller_affiliation,"new value",animals) }
+		} else if function == "updateAsset" 		{ return t.updateAsset(stub, v, caller, caller_affiliation,"dummy new value",animals) }
 
 		return nil, errors.New("Function of the name "+ function +" doesn't exist.")
 
