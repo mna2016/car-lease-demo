@@ -359,7 +359,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 		} else if function == "update_vin" 			{ return t.update_vin(stub, v, caller, caller_affiliation, args[0])
         } else if function == "update_colour" 		{ return t.update_colour(stub, v, caller, caller_affiliation, args[0])
 		} else if function == "scrap_vehicle" 		{ return t.scrap_vehicle(stub, v, caller, caller_affiliation) 
-		} else if function == "update_Asset" 		{ return t.updateAsset(stub, v, caller, caller_affiliation,animals) }
+		} else if function == "update_Asset" 		{ return t.updateAsset(stub, v, caller, caller_affiliation,"new value",animals) }
 
 		return nil, errors.New("Function of the name "+ function +" doesn't exist.")
 
@@ -583,30 +583,30 @@ func (t *SimpleChaincode) createAsset(stub shim.ChaincodeStubInterface, caller s
 func (t *SimpleChaincode) updateAsset(stub shim.ChaincodeStubInterface, v Vehicle, caller string, caller_affiliation string, new_value string, animals Animal) ([]byte, error) {
 
 //if the transaction is fired by a person who owns this asset then he has the right to update
-	if 	v.OwnerId == animals.caller		
-				{
+	if 	v.OwnerId == animals.Caller		{
+				
 
-					if 	animals.TransactionType			!=nil	{ v.TransactionType = animals.TransactionType 	} 	
-					if	animals.OwnerId 				!= nil	{ v.OwnerId = animals.OwnerId					} 
+					if 	animals.TransactionType			!= ""	{ v.TransactionType = animals.TransactionType 	} 	
+					if	animals.OwnerId 				!= ""	{ v.OwnerId = animals.OwnerId					} 
 				//	if	AssetId							!= nil	{ v.AssetId = animals.AssetId					}
-					if	animals.MatnrAf					!= nil 	{ v.MatnrAf = animals.MatnrAf					}
-					if	animals.PoDma					!= nil	{ v.PoDma = animals.PoDma						}
-					if	animals.PoSupp					!= nil	{ v.PoSupp = animals.PoSupp						}
-					if	animals.DmaDelDate				!= nil	{ v.DmaDelDate = animals.DmaDelDate				}	
-					if	animals.AfDelDate				!= nil 	{ v.AfDelDate = animals.AfDelDate				}
-					if	animals.TruckMod				!= nil	{ v.TruckMod = animals.TruckMod					}
-					if	animals.TruckPDate				!= nil	{ v.TruckPDate = animals.TruckPDate				}
-					if	animals.TruckChnum				!= nil	{ v.TruckChnum = animals.TruckChnum				}	
-					if	animals.TruckEnnum				!= nil	{ v.TruckEnnum = animals.TruckEnnum				}	
-					if	animals.SuppTest				!= nil 	{ v.SuppTest = animals.SuppTest					}
-					if	animals.GrDma					!= nil	{ v.GrDma = animals.GrDma						}
-					if	animals.GrAf					!= nil 	{ v.GrAf = animals.GrAf							}
-					if	animals.DmaMasdat				!= nil	{ v.DmaMasdat = animals.DmaMasdat				}	
-					if	animals.AfDmaTest				!= nil	{ v.AfDmaTest = animals.AfDmaTest				}
-					if 	animals.DmaDelCert				!= nil 	{ v.DmaDelCert = animals.DmaDelCert				}	
-					if	animals.AfDoc					!= nil 	{ v.AfDoc = animals.AfDoc						}
-					if	animals.Make					!= nil 	{ v.Make = animals.Make							}            	
-					if 	animals.Caller					!= nil	{ v.Caller = animals.Caller						}
+					if	animals.MatnrAf					!= "" 	{ v.MatnrAf = animals.MatnrAf					}
+					if	animals.PoDma					!= ""	{ v.PoDma = animals.PoDma						}
+					if	animals.PoSupp					!= ""	{ v.PoSupp = animals.PoSupp						}
+					if	animals.DmaDelDate				!= ""	{ v.DmaDelDate = animals.DmaDelDate				}	
+					if	animals.AfDelDate				!= "" 	{ v.AfDelDate = animals.AfDelDate				}
+					if	animals.TruckMod				!= ""	{ v.TruckMod = animals.TruckMod					}
+					if	animals.TruckPDate				!= ""	{ v.TruckPDate = animals.TruckPDate				}
+					if	animals.TruckChnum				!= ""	{ v.TruckChnum = animals.TruckChnum				}	
+					if	animals.TruckEnnum				!= ""	{ v.TruckEnnum = animals.TruckEnnum				}	
+					if	animals.SuppTest				!= "" 	{ v.SuppTest = animals.SuppTest					}
+					if	animals.GrDma					!= ""	{ v.GrDma = animals.GrDma						}
+					if	animals.GrAf					!= "" 	{ v.GrAf = animals.GrAf							}
+					if	animals.DmaMasdat				!= ""	{ v.DmaMasdat = animals.DmaMasdat				}	
+					if	animals.AfDmaTest				!= ""	{ v.AfDmaTest = animals.AfDmaTest				}
+					if 	animals.DmaDelCert				!= "" 	{ v.DmaDelCert = animals.DmaDelCert				}	
+					if	animals.AfDoc					!= "" 	{ v.AfDoc = animals.AfDoc						}
+					if	animals.Make					!= "" 	{ v.Make = animals.Make							}            	
+					if 	animals.Caller					!= ""	{ v.Caller = animals.Caller						}
 
 
 			} else {
