@@ -110,7 +110,7 @@ type Animal struct {
 		DmaDelCert			string	`json:"dmaDelCert"`
 		AfDoc				string	`json:"afDoc"`
 		Make            string `json:"make"`
-		V5cID           string `json:"v5cID"`
+		V5cid           string `json:"v5cID"`
 
 	}
 	
