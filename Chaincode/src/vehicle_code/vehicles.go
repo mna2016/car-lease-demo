@@ -851,7 +851,7 @@ func (t *SimpleChaincode) update_colour(stub shim.ChaincodeStubInterface, v Vehi
 			caller_affiliation	== MANUFACTURER			&&/*((v.Owner				== caller			&&
 			caller_affiliation	== MANUFACTURER)		||
 			caller_affiliation	== AUTHORITY)			&&*/
-			v.Scrapped			== false				{
+/*			v.Scrapped			== false				{
 
 					v.Colour = new_value
 	} else {
