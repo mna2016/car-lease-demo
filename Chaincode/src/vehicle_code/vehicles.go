@@ -356,6 +356,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 		return nil, errors.New("Function of the name "+ function +" doesn't exist.")
 
 	}
+	}
 }
 //=================================================================================================================================
 //	Query - Called on chaincode query. Takes a function name passed and calls that function. Passes the
