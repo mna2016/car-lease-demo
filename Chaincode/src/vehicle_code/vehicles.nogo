@@ -60,57 +60,9 @@ type Vehicle struct {
 	LeaseContractID string `json:"leaseContractID"`
 }
 
-//BEGIN new vehicle data structure
-/* type Vehicle struct {
-{
-		TransactionType 	string	`json:"transactionType"`
-		OwnerId				string	`json:"ownerId"`
-		AssetId				string	`json:"assetId"`
-		MatnrAf				string	`json:"matnrAf"`
-		PoDma				string	`json:"poDma"`
-		PoSupp				string	`json:"poSupp"`
-		DmaDelDate			string	`json:"dmaDelDate"`
-		AfDelDate			string	`json:"afDelDate"`
-		TruckMod			string	`json:"truckMod"`
-		truckPdate			string	`json:"truckPdate"`
-		TruckChnum			string	`json:"truckChnum"`
-		TruckEnnum			string	`json:"truckEnnum"`
-		SuppTest			string	`json:"suppTest"`
-		GrDma				string	`json:"grDma"`
-		GrAf				string	`json:"grAf"`
-		DmaMasdat			string	`json:"dmaMasdat"`
-		AfDmaTest			string	`json:"afDmaTest"`
-		DmaDelCert			string	`json:"dmaDelCert"`
-		AfDoc				string	`json:"afDoc"`
-}  
-*/
-//END new vehicle Data Structure
-
-}
-
-//Animal struct for local storage of input arguments read from incoming transaction
 type Animal struct {
-		TransactionType 	string	`json:"transactionType"`
-		OwnerId				string	`json:"ownerId"`
-		AssetId				string	`json:"assetId"`		//BLOCKCHAIN KEY
-		MatnrAf				string	`json:"matnrAf"`
-		PoDma				string	`json:"poDma"`
-		PoSupp				string	`json:"poSupp"`
-		DmaDelDate			string	`json:"dmaDelDate"`
-		AfDelDate			string	`json:"afDelDate"`
-		TruckMod			string	`json:"truckMod"`
-		truckPdate			string	`json:"truckPdate"`
-		TruckChnum			string	`json:"truckChnum"`
-		TruckEnnum			string	`json:"truckEnnum"`
-		SuppTest			string	`json:"suppTest"`
-		GrDma				string	`json:"grDma"`
-		GrAf				string	`json:"grAf"`
-		DmaMasdat			string	`json:"dmaMasdat"`
-		AfDmaTest			string	`json:"afDmaTest"`
-		DmaDelCert			string	`json:"dmaDelCert"`
-		AfDoc				string	`json:"afDoc"`
-
-
+		V5cid  string `json:"v5cID"`
+		Make   string `json:"make"`
 	}
 	
 //==============================================================================================================================
