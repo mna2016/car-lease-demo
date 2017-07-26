@@ -310,8 +310,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
         return t.create_vehicle(stub, "DVLA", AUTHORITY, animals.V5cid)
 	} else if function == "createAsset" {
 		return t.createAsset(stub, "DVLA", AUTHORITY, animals.V5cid)
-    } 
-	else if function == "ping" {
+    } else if function == "ping" {
         return t.ping(stub)
     } else { 																				// If the function is not a create then there must be a car so we need to retrieve the car.
 		argPos := 1
