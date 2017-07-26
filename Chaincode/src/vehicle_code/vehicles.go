@@ -396,7 +396,7 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 		return t.get_vehicle_details(stub, v, caller, caller_affiliation)
 	} else if function == "check_unique_v5c" {
 		return t.check_unique_v5c(stub, animals.V5cid, caller, caller_affiliation)
-	} else if function == "get_vehicles" {
+	} else if function == "get_vehicles" || function == "readAllAssets" {
 		return t.get_vehicles(stub, caller, caller_affiliation)
 	} else if function == "get_ecert" {
 		return t.get_ecert(stub,animals.V5cid)
@@ -958,14 +958,14 @@ func (t *SimpleChaincode) get_vehicle_details(stub shim.ChaincodeStubInterface, 
 
 	bytes, err := json.Marshal(v)
 
-																if err != nil { return nil, errors.New("GET_VEHICLE_DETAILS: Invalid vehicle object") }
+	if err != nil { return nil, errors.New("READASSET: Invalid vehicle object") }
 
-	if 		v.OwnerId				== caller		||
-			caller_affiliation	== AUTHORITY	{
+	if 		v.OwnerId	== caller		||
+				caller  == REGULATOR	{
 
 					return bytes, nil
 	} else {
-																return nil, errors.New("Permission Denied. get_vehicle_details")
+				return nil, errors.New("Permission Denied. readAsset. The caller should be owner or Regulator.")
 	}
 
 }
@@ -975,15 +975,22 @@ func (t *SimpleChaincode) get_vehicle_details(stub shim.ChaincodeStubInterface, 
 //=================================================================================================================================
 
 func (t *SimpleChaincode) get_vehicles(stub shim.ChaincodeStubInterface, caller string, caller_affiliation string) ([]byte, error) {
+
+	if 	caller  != REGULATOR	{
+
+ 			return nil, errors.New("Permission Denied! Only a REGULATOR may read list of all assets")
+	}
+
+
 	bytes, err := stub.GetState("v5cIDs")
 
-																			if err != nil { return nil, errors.New("Unable to get v5cIDs") }
+	if err != nil { return nil, errors.New("Unable to get v5cIDs\assetIds") }
 
 	var v5cIDs V5C_Holder
 
 	err = json.Unmarshal(bytes, &v5cIDs)
 
-																			if err != nil {	return nil, errors.New("Corrupt V5C_Holder") }
+	if err != nil {	return nil, errors.New("Corrupt V5C_Holder\AssetID Holder") }
 
 	result := "["
 
@@ -994,7 +1001,7 @@ func (t *SimpleChaincode) get_vehicles(stub shim.ChaincodeStubInterface, caller 
 
 		v, err = t.retrieve_v5c(stub, v5c)
 
-		if err != nil {return nil, errors.New("Failed to retrieve V5C")}
+		if err != nil {return nil, errors.New("Failed to retrieve V5C\AssetId")}
 
 		temp, err = t.get_vehicle_details(stub, v, caller, caller_affiliation)
 
@@ -1018,7 +1025,7 @@ func (t *SimpleChaincode) get_vehicles(stub shim.ChaincodeStubInterface, caller 
 func (t *SimpleChaincode) check_unique_v5c(stub shim.ChaincodeStubInterface, v5c string, caller string, caller_affiliation string) ([]byte, error) {
 	_, err := t.retrieve_v5c(stub, v5c)
 	if err == nil {
-		return []byte("false"), errors.New("V5C is not unique")
+		return []byte("false"), errors.New("V5C\AssetId is not unique")
 	} else {
 		return []byte("true"), nil
 	}
@@ -1031,5 +1038,5 @@ func main() {
 
 	err := shim.Start(new(SimpleChaincode))
 
-															if err != nil { fmt.Printf("Error starting Chaincode: %s", err) }
+	if err != nil { fmt.Printf("Error starting Chaincode: %s", err) }
 }
