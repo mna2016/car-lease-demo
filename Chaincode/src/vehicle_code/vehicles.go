@@ -385,7 +385,7 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 		fmt.Println("error:", err2)
 	}
     
-	caller = animals.caller
+	caller = animals.Caller
     caller_affiliation = AUTHORITY
     
     
