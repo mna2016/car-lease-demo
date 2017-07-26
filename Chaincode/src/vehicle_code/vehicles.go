@@ -86,7 +86,20 @@ type Vehicle struct {
 		DmaDelCert			string	`json:"dmaDelCert"`
 		AfDoc				string	`json:"afDoc"`
 		Caller				string  `json:"caller"`
-}  
+
+			Make            string `json:"make"`
+	Model           string `json:"model"`
+	Reg             string `json:"reg"`
+	VIN             int    `json:"VIN"`
+	Owner           string `json:"owner"`
+	Scrapped        bool   `json:"scrapped"`
+	Status          int    `json:"status"`
+	Colour          string `json:"colour"`
+	LeaseContractID string `json:"leaseContractID"`
+	
+	
+		
+		}  
 
 //END new vehicle Data Structure
 
