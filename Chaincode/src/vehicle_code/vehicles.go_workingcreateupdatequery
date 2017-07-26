@@ -65,6 +65,7 @@ type Vehicle struct {
 //BEGIN new vehicle data structure
 type Vehicle struct {
 
+		V5cID           string `json:"v5cID"`
 		TransactionType 	string	`json:"transactionType"`
 		OwnerId				string	`json:"ownerId"`
 		AssetId				string	`json:"assetId"`
@@ -85,8 +86,19 @@ type Vehicle struct {
 		DmaDelCert			string	`json:"dmaDelCert"`
 		AfDoc				string	`json:"afDoc"`
 		Caller				string  `json:"caller"`
-		V5cID           string `json:"v5cID"`
 
+			Make            string `json:"make"`
+	Model           string `json:"model"`
+	Reg             string `json:"reg"`
+	VIN             int    `json:"VIN"`
+	Owner           string `json:"owner"`
+	Scrapped        bool   `json:"scrapped"`
+	Status          int    `json:"status"`
+	Colour          string `json:"colour"`
+	LeaseContractID string `json:"leaseContractID"`
+	
+	
+		
 		}  
 
 //END new vehicle Data Structure
@@ -114,10 +126,10 @@ type Animal struct {
 		AfDmaTest			string	`json:"afDmaTest"`
 		DmaDelCert			string	`json:"dmaDelCert"`
 		AfDoc				string	`json:"afDoc"`
-		Caller				string  `json:"caller"`		//the UI/person who fired the transaction
+		Make            string `json:"make"`
 		V5cid           string `json:"v5cID"`
-
-		}
+		Caller				string  `json:"caller"`		//the UI/person who fired the transaction
+	}
 	
 //==============================================================================================================================
 //	V5C Holder - Defines the structure that holds all the v5cIDs for vehicles that have been created.
@@ -336,7 +348,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
         if strings.Contains(function, "update") == false && function != "scrap_vehicle"    { 									// If the function is not an update or a scrappage it must be a transfer so we need to get the ecert of the recipient.
 
 
-				/*if 		   function == "authority_to_manufacturer" { return t.authority_to_manufacturer(stub, v, caller, caller_affiliation, args[0], "manufacturer")
+				if 		   function == "authority_to_manufacturer" { return t.authority_to_manufacturer(stub, v, caller, caller_affiliation, args[0], "manufacturer")
 				} else if  function == "manufacturer_to_private"   { return t.manufacturer_to_private(stub, v, caller, caller_affiliation, args[0], "private")
 				} else if  function == "private_to_private" 	   { return t.private_to_private(stub, v, caller, caller_affiliation, args[0], "private")
 				} else if  function == "private_to_lease_company"  { return t.private_to_lease_company(stub, v, caller, caller_affiliation, args[0], "lease_company")
@@ -350,8 +362,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 		} else if function == "update_vin" 			{ return t.update_vin(stub, v, caller, caller_affiliation, args[0])
         } else if function == "update_colour" 		{ return t.update_colour(stub, v, caller, caller_affiliation, args[0])
 		} else if function == "scrap_vehicle" 		{ return t.scrap_vehicle(stub, v, caller, caller_affiliation) 
-		} else*/ 
-				if function == "updateAsset" 		{ return t.updateAsset(stub, v, caller, caller_affiliation,"dummy new value",animals) }
+		} else if function == "updateAsset" 		{ return t.updateAsset(stub, v, caller, caller_affiliation,"dummy new value",animals) }
 
 		return nil, errors.New("Function of the name "+ function +" doesn't exist.")
 
@@ -580,7 +591,7 @@ func (t *SimpleChaincode) updateAsset(stub shim.ChaincodeStubInterface, v Vehicl
 
 					if 	animals.TransactionType			!= ""	{ v.TransactionType = animals.TransactionType 	} 	
 					if	animals.OwnerId 				!= ""	{ v.OwnerId = animals.OwnerId					} 
-					
+				//	if	AssetId							!= nil	{ v.AssetId = animals.AssetId					}
 					if	animals.MatnrAf					!= "" 	{ v.MatnrAf = animals.MatnrAf					}
 					if	animals.PoDma					!= ""	{ v.PoDma = animals.PoDma						}
 					if	animals.PoSupp					!= ""	{ v.PoSupp = animals.PoSupp						}
@@ -605,7 +616,6 @@ func (t *SimpleChaincode) updateAsset(stub shim.ChaincodeStubInterface, v Vehicl
 
 		return nil, errors.New(fmt.Sprint("Permission denied. updateAsset %t %t %t" + v.Owner == caller, caller_affiliation == MANUFACTURER, v.Scrapped))
 	}
-			v.AssetId = v.V5cID	//assetId and v5cid are the same thing. 					
 
 	_, err := t.save_changes(stub, v)
 
@@ -616,7 +626,7 @@ func (t *SimpleChaincode) updateAsset(stub shim.ChaincodeStubInterface, v Vehicl
 }
 
 
-/* COMMENTED the vehicle "update" functions as of 7/26/2017 6:00PM
+
 
 //=================================================================================================================================
 //	 Transfer Functions
@@ -940,7 +950,7 @@ func (t *SimpleChaincode) scrap_vehicle(stub shim.ChaincodeStubInterface, v Vehi
 	return nil, nil
 
 }
-*/
+
 //=================================================================================================================================
 //	 Read Functions
 //=================================================================================================================================
