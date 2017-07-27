@@ -315,6 +315,11 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 		fmt.Println("error:", err2)
 	}
     
+	// IMPORTANT: v5cid variable is used in most of the places in this contract
+	// the frontend will pass the field assetID as the
+	// copy assetID over to v5cid here
+	animals.V5cid = animals.AssetId
+	
     //fmt.Println("Input Arguments are: %v", animals)
     //return nil, errors.New("animals struct :"+ animals.V5cid + ":" + animals.Make + ":")
 
@@ -385,6 +390,11 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 		fmt.Println("error:", err2)
 	}
     
+	// IMPORTANT: v5cid variable is used in most of the places in this contract
+	// the frontend will pass the field assetID as the
+	// copy assetID over to v5cid here
+	animals.V5cid = animals.AssetId
+	
 	caller = animals.Caller
     caller_affiliation = AUTHORITY
     
