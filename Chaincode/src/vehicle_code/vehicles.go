@@ -981,11 +981,12 @@ func (t *SimpleChaincode) get_vehicle_details(stub shim.ChaincodeStubInterface, 
 	//in structure. only the vehicle struct will be stored on blockchain. 
 	//This reformat is just an adjustment.
 
-	msgpart1  := []byte("{\"assetstate\":{\"asset\":")
-	msgpart2  := []byte("},\"txnid\":\"\",\"txnts\":\"\"}") //txnid and txnts to be populated
+	msgpart1  := byte("{\"assetstate\":{\"asset\":")
+	msgpart2  := byte("},\"txnid\":\"\",\"txnts\":\"\"}") //txnid and txnts to be populated
 
-	bytes2 := append(msgpart1,bytes,msgpart2)	
+	//bytes2 := append(msgpart1,bytes,msgpart2)	
 	
+	bytes2 := append(msgpart1,bytes,msgpart2)	
 	if err != nil { return nil, errors.New("READASSET: Invalid vehicle object") }
 
 	if 		v.OwnerId	== caller		||
