@@ -981,8 +981,8 @@ func (t *SimpleChaincode) get_vehicle_details(stub shim.ChaincodeStubInterface, 
 	//in structure. only the vehicle struct will be stored on blockchain. 
 	//This reformat is just an adjustment.
 
-	msgpart1  := []bytes("{\"assetstate\":{\"asset\":")
-	msgpart2  := []bytes("},\"txnid\":\"\",\"txnts\":\"\"}") //txnid and txnts to be populated
+	msgpart1  := []byte("{\"assetstate\":{\"asset\":")
+	msgpart2  := []byte("},\"txnid\":\"\",\"txnts\":\"\"}") //txnid and txnts to be populated
 
 	bytes2 := append(msgpart1,bytes,msgpart2)	
 	
@@ -1011,7 +1011,7 @@ func (t *SimpleChaincode) get_vehicle_details2(stub shim.ChaincodeStubInterface,
 				caller  == REGULATOR	{
 
 					//return bytes, nil
-					return bytes2, nil
+					return bytes, nil
 	} else {
 				return nil, errors.New("Permission Denied. readAsset. The caller should be owner or Regulator.")
 	}
