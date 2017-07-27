@@ -973,7 +973,7 @@ func (t *SimpleChaincode) scrap_vehicle(stub shim.ChaincodeStubInterface, v Vehi
 //=================================================================================================================================
 func (t *SimpleChaincode) get_vehicle_details(stub shim.ChaincodeStubInterface, v Vehicle, caller string, caller_affiliation string) ([]byte, error) {
 
-	bytes, err := json.Marshal(v)
+	bytes1, err := json.Marshal(v)
 	
 
 	//make up the response in such a manner to have the response sandwiched
@@ -989,7 +989,7 @@ func (t *SimpleChaincode) get_vehicle_details(stub shim.ChaincodeStubInterface, 
 	
 	//bytes2 :=  msgpart1 + bytes + msgpart2	
 	
-	bytes2:=bytes.Join(msgpart1,bytes,msgpart2);
+	bytes2:=bytes.Join(msgpart1,bytes1,msgpart2);
 	
 	if err != nil { return nil, errors.New("READASSET: Invalid vehicle object") }
 
