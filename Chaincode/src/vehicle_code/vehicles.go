@@ -536,8 +536,12 @@ func (t *SimpleChaincode) createAsset(stub shim.ChaincodeStubInterface, caller s
 
 	vehicle_json := "{"+v5c_ID+TransactionType+OwnerId+AssetId+MatnrAf+PoDma+PoSupp+DmaDelDate+AfDelDate+TruckMod+TruckPDate+TruckChnum+TruckEnnum+SuppTest+GrDma+GrAf+DmaMasdat+AfDmaTest+DmaDelCert+AfDoc+Caller+"}" 	// Concatenates the variables to create the total JSON object
 
-	matched, err := regexp.Match("^[A-z][A-z][0-9]{7}", []byte(v5cID))  				// matched = true if the v5cID passed fits format of two letters followed by seven digits
-
+	//matched, err := regexp.Match("^[A-z][A-z][0-9]{7}", []byte(v5cID))  				// matched = true if the v5cID passed fits format of two letters followed by seven digits
+	
+	//NOTE: format check changed as per request from SAP and UI developers
+	// NOW matched = true if the v5cID passed fits format: 10 numeric digits
+	matched, err := regexp.Match("^[0-9]{10}", []byte(v5cID))  				
+		
 												if err != nil { fmt.Printf("CREATE_VEHICLE: Invalid v5cID: %s", err); return nil, errors.New("Invalid v5cID") }
 
 	if 				v5c_ID  == "" 	 ||
@@ -969,13 +973,45 @@ func (t *SimpleChaincode) scrap_vehicle(stub shim.ChaincodeStubInterface, v Vehi
 func (t *SimpleChaincode) get_vehicle_details(stub shim.ChaincodeStubInterface, v Vehicle, caller string, caller_affiliation string) ([]byte, error) {
 
 	bytes, err := json.Marshal(v)
+	
+
+	//make up the response in such a manner to have the response sandwiched
+	//between mspart1 and msgpart2. this is done to reformat the response 
+	//which the UI expects. The data stored on the blockchain will have no change 
+	//in structure. only the vehicle struct will be stored on blockchain. 
+	//This reformat is just an adjustment.
+
+	msgpart1  := []bytes("{\"assetstate\":{\"asset\":")
+	msgpart2  := []bytes("},\"txnid\":\"\",\"txnts\":\"\"}") //txnid and txnts to be populated
+
+	bytes2 := append(msgpart1,bytes,msgpart2)	
+	
+	if err != nil { return nil, errors.New("READASSET: Invalid vehicle object") }
+
+	if 		v.OwnerId	== caller		||
+				caller  == REGULATOR	{
+
+					//return bytes, nil
+					return bytes2, nil
+	} else {
+				return nil, errors.New("Permission Denied. readAsset. The caller should be owner or Regulator.")
+	}
+
+}
+
+
+func (t *SimpleChaincode) get_vehicle_details2(stub shim.ChaincodeStubInterface, v Vehicle, caller string, caller_affiliation string) ([]byte, error) {
+
+	bytes, err := json.Marshal(v)
+	
 
 	if err != nil { return nil, errors.New("READASSET: Invalid vehicle object") }
 
 	if 		v.OwnerId	== caller		||
 				caller  == REGULATOR	{
 
-					return bytes, nil
+					//return bytes, nil
+					return bytes2, nil
 	} else {
 				return nil, errors.New("Permission Denied. readAsset. The caller should be owner or Regulator.")
 	}
@@ -1015,7 +1051,7 @@ func (t *SimpleChaincode) get_vehicles(stub shim.ChaincodeStubInterface, caller 
 
 		if err != nil {return nil, errors.New("Failed to retrieve V5C or AssetId")}
 
-		temp, err = t.get_vehicle_details(stub, v, caller, caller_affiliation)
+		temp, err = t.get_vehicle_details2(stub, v, caller, caller_affiliation)
 
 		if err == nil {
 			result += string(temp) + ","
