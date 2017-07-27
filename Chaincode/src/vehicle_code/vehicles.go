@@ -989,7 +989,8 @@ func (t *SimpleChaincode) get_vehicle_details(stub shim.ChaincodeStubInterface, 
 	
 	//bytes2 :=  msgpart1 + bytes + msgpart2	
 	
-	bytes2:=bytes.Join(msgpart1,bytes1,msgpart2);
+	bytes2:=bytes.Join(msgpart1,bytes1)
+	bytes2=bytes.Join(bytes2,msgpart2)
 	
 	if err != nil { return nil, errors.New("READASSET: Invalid vehicle object") }
 
