@@ -103,7 +103,8 @@ type Vehicle struct {
 type Animal struct {
 		TransactionType 	string	`json:"transactionType"`
 		OwnerId				string	`json:"ownerId"`
-		AssetId				string	`json:"assetId"`		//BLOCKCHAIN KEY
+		AssetId				string	`json:"assetID"`		//BLOCKCHAIN KEY
+															//NOTE: assetId changed to assetID based on request from UI developer
 		MatnrAf				string	`json:"matnrAf"`
 		PoDma				string	`json:"poDma"`
 		PoSupp				string	`json:"poSupp"`
@@ -511,7 +512,7 @@ func (t *SimpleChaincode) createAsset(stub shim.ChaincodeStubInterface, caller s
 	//Initialize variables which will make up the JSON structure that will be written to world state
 		TransactionType 	:= "\"transactionType\":\"UNDEFINED\", "
 		OwnerId				:= "\"ownerId\":\""+REGULATOR+"\", "			//owner at the time of creation is always regulator
-		AssetId				:= "\"assetId\":\""+v5cID+"\", "
+		AssetId				:= "\"assetID\":\""+v5cID+"\", "				//NOTE:assetId changed to assetID based on UI developer request
 		MatnrAf				:= "\"matnrAf\":\"UNDEFINED\", "
 		PoDma				:= "\"poDma\":\"UNDEFINED\", "
 		PoSupp				:= "\"poSupp\":\"UNDEFINED\", "
