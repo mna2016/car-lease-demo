@@ -404,8 +404,8 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
         } else if function == "update_colour" 		{ return t.update_colour(stub, v, caller, caller_affiliation, args[0])
 		} else if function == "scrap_vehicle" 		{ return t.scrap_vehicle(stub, v, caller, caller_affiliation) 
 		} else*/ 
-				if function == "updateAsset" 		{ return t.updateAsset(stub, v, caller, caller_affiliation,"dummy new value",animals) }
-
+				if function == "updateAsset" 		{ return t.updateAsset(stub, v, caller, caller_affiliation,"dummy new value",animals) 
+				} else if function == "updateDoc" 		{ return t.updateDoc(stub, v, caller, caller_affiliation,animals) }
 		
 	}
 	}
@@ -462,6 +462,8 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 		return t.get_ecert(stub,animals.V5cid)
 	} else if function == "ping" {
 		return t.ping(stub)
+	}  else if function == "readDoc" {
+		return t.readDoc(stub, v, caller, caller_affiliation)
 	}
 
 	return nil, errors.New("Received unknown function invocation " + function)
@@ -1186,7 +1188,7 @@ func (t *SimpleChaincode) updateDoc(stub shim.ChaincodeStubInterface, v Vehicle,
 //=================================================================================================================================
 //	 Update Doc - Attaches document to a blockchain block
 //=================================================================================================================================
-func (t *SimpleChaincode) readDoc(stub shim.ChaincodeStubInterface, v Vehicle, caller string, caller_affiliation string, animals Animal) ([]byte, error) {
+func (t *SimpleChaincode) readDoc(stub shim.ChaincodeStubInterface, v Vehicle, caller string, caller_affiliation string) ([]byte, error) {
 
 
 	//if the transaction is fired by a person who owns this asset then he has the right to update
