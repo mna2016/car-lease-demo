@@ -52,7 +52,7 @@ type  SimpleChaincode struct {
 
 /* Vehicle structure commented out 
 //==============================================================================================================================
-//	Vehicle - Defines the structure for a car object. JSON on right tells it what JSON fields to map to
+//	Vehicle - Defines the structure for a *** object. JSON on right tells it what JSON fields to map to
 //			  that element when reading a JSON object into the struct e.g. JSON make -> Struct Make.
 //==============================================================================================================================
 type Vehicle struct {
@@ -328,7 +328,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 	}
     
 	//Now assign the real arguments to object animal 
-	animals = inreq.Asset.Anim
+	animals = &inreq.Asset.Anim
 	
 	// IMPORTANT: v5cid variable is used in most of the places in this contract
 	// the frontend will pass the field assetID as the
@@ -344,7 +344,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 		return t.createAsset(stub, "DVLA", AUTHORITY, animals.V5cid)
     } else if function == "ping" {
         return t.ping(stub)
-    } else { 																				// If the function is not a create then there must be a car so we need to retrieve the car.
+    } else { 																				// If the function is not a create then there must be a *** so we need to retrieve the ***.
 		//argPos := 1
 		
 
@@ -478,7 +478,7 @@ func (t *SimpleChaincode) create_vehicle(stub shim.ChaincodeStubInterface, calle
 
 																		if err != nil { return nil, errors.New("Invalid JSON object") }
 
-	record, err := stub.GetState(v.V5cID) 								// If not an error then a record exists so cant create a new car with this V5cID as it must be unique
+	record, err := stub.GetState(v.V5cID) 								// If not an error then a record exists so cant create a new *** with this V5cID as it must be unique
 
 																		if record != nil { return nil, errors.New("Vehicle already exists") }
 
@@ -568,7 +568,7 @@ func (t *SimpleChaincode) createAsset(stub shim.ChaincodeStubInterface, caller s
 
 																		if err != nil { return nil, errors.New("Invalid JSON object") }
 
-	record, err := stub.GetState(v.V5cID) 								// If not an error then a record exists so cant create a new car with this V5cID as it must be unique
+	record, err := stub.GetState(v.V5cID) 								// If not an error then a record exists so cant create a new *** with this V5cID as it must be unique
 
 																		if record != nil { return nil, errors.New("Vehicle already exists") }
 
@@ -696,7 +696,7 @@ func (t *SimpleChaincode) manufacturer_to_private(stub shim.ChaincodeStubInterfa
 			v.Model  == "UNDEFINED" ||
 			v.Reg 	 == "UNDEFINED" ||
 			v.Colour == "UNDEFINED" ||
-			v.VIN == 0				{					//If any part of the car is undefined it has not bene fully manufacturered so cannot be sent
+			v.VIN == 0				{					//If any part of the *** is undefined it has not bene fully manufacturered so cannot be sent
 															fmt.Printf("MANUFACTURER_TO_PRIVATE: Car not fully defined")
 															return nil, errors.New(fmt.Sprintf("Car not fully defined. %v", v))
 	}
