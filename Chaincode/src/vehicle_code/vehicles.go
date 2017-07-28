@@ -447,16 +447,14 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 	caller = animals.Caller
     caller_affiliation = AUTHORITY
     
-    v, err := t.retrieve_v5c(stub, animals.V5cid)
+    
 
 	if function == "get_vehicle_details" || function == "readAsset"  {
 		if len(args) != 1 { fmt.Printf("Incorrect number of arguments passed"); return nil, errors.New("QUERY: Incorrect number of arguments passed") }
-		//v, err := t.retrieve_v5c(stub, animals.V5cid)
+		v, err := t.retrieve_v5c(stub, animals.V5cid)
 		if err != nil { fmt.Printf("QUERY: Error retrieving v5c: %s", err); return nil, errors.New("QUERY: Error retrieving v5c "+err.Error())}
 		return t.get_vehicle_details(stub, v, caller, caller_affiliation)
-		 else if function == "readDoc" {
-		return t.readDoc(stub, v, caller, caller_affiliation)
-	}
+		 
 	} else if function == "check_unique_v5c" {
 		return t.check_unique_v5c(stub, animals.V5cid, caller, caller_affiliation)
 	} else if function == "get_vehicles" || function == "readAllAssets" {
@@ -465,6 +463,9 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 		return t.get_ecert(stub,animals.V5cid)
 	} else if function == "ping" {
 		return t.ping(stub)
+	} else if function == "readDoc" {
+		 v, err := t.retrieve_v5c(stub, animals.V5cid)
+		 return t.readDoc(stub, v, caller, caller_affiliation) 
 	}
 
 	return nil, errors.New("Received unknown function invocation " + function)
