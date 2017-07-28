@@ -132,7 +132,31 @@ type Animal struct {
 
 /* momentary structure to hol input json*/
 type InRequest struct {
-		Asset struct {	Anim	Animal } 
+		Asset struct {	
+		
+		TransactionType 	string	`json:"transactionType"`
+		OwnerId				string	`json:"ownerId"`
+		AssetId				string	`json:"assetID"`		//BLOCKCHAIN KEY
+															//NOTE: assetId changed to assetID based on request from UI developer
+		MatnrAf				string	`json:"matnrAf"`
+		PoDma				string	`json:"poDma"`
+		PoSupp				string	`json:"poSupp"`
+		DmaDelDate			string	`json:"dmaDelDate"`
+		AfDelDate			string	`json:"afDelDate"`
+		TruckMod			string	`json:"truckMod"`
+		TruckPDate			string	`json:"truckPdate"`
+		TruckChnum			string	`json:"truckChnum"`
+		TruckEnnum			string	`json:"truckEnnum"`
+		SuppTest			string	`json:"suppTest"`
+		GrDma				string	`json:"grDma"`
+		GrAf				string	`json:"grAf"`
+		DmaMasdat			string	`json:"dmaMasdat"`
+		AfDmaTest			string	`json:"afDmaTest"`
+		DmaDelCert			string	`json:"dmaDelCert"`
+		AfDoc				string	`json:"afDoc"`
+		Caller				string  `json:"caller"`		//the UI/person who fired the transaction
+		V5cid           string `json:"v5cID"`
+		} 
 }
 		
 //==============================================================================================================================
@@ -328,7 +352,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 	}
     
 	//Now assign the real arguments to object animal 
-	animals = inreq.Asset.Anim
+	animals = inreq.Asset
 	
 	return nil, errors.New("INPUT REQUEST:" + Args[1]+ "animals struct :"+ inreq.Asset.Anim.AssetId + ":" + inreq.Asset.Anim.Caller + ":" )
 	// IMPORTANT: v5cid variable is used in most of the places in this contract
