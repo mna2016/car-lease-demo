@@ -132,12 +132,7 @@ type Animal struct {
 
 /* momentary structure to hol input json*/
 type InRequest struct {
-
-		AssetState struct {
-			Asset struct {	Anim	Animal } 
-		}
-		TxnId	string  `json:"txnid"`	
-		TxnTs	string  `json:"txnts"`	
+		Asset struct {	Anim	Animal } 
 }
 		
 //==============================================================================================================================
@@ -333,7 +328,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 	}
     
 	//Now assign the real arguments to object animal 
-	animals = inreq.AssetState.Asset.Anim
+	animals = inreq.Asset.Anim
 	
 	// IMPORTANT: v5cid variable is used in most of the places in this contract
 	// the frontend will pass the field assetID as the
