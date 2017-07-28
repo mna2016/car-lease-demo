@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"bytes"
+	"unicode/utf8"
+
 //	"strconv"
 	"strings"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
@@ -1151,6 +1153,77 @@ func (t *SimpleChaincode) check_unique_v5c(stub shim.ChaincodeStubInterface, v5c
 		return []byte("true"), nil
 	}
 }
+
+//=================================================================================================================================
+//	 Update Doc - Attaches document to a blockchain block
+//=================================================================================================================================
+func (t *SimpleChaincode) updateDoc(stub shim.ChaincodeStubInterface, v Vehicle, caller string, caller_affiliation string, animals Animal) ([]byte, error) {
+
+//if the transaction is fired by a person who owns this asset then he has the right to update
+	if 	v.OwnerId == animals.Caller		{
+					
+					if	animals.AfDoc					== "" 	{ return nil, errors.New("AfDoc cannot be empty when updateDoc is called!")}
+
+					if  utf8.RuneCountInString(animals.AfDoc) > 250000 { return nil, errors.New("AfDoc cannot be larger than 250KB!")}
+
+					} else {
+
+		return nil, errors.New(fmt.Sprint("Permission denied. updateAsset %t %t" + v.OwnerId == caller, caller_affiliation == MANUFACTURER))
+	}
+	
+	v.AssetId = v.V5cID	//assetId and v5cid are the same thing. 					
+	v.AfDoc = animals.AfDoc //move input to vehicle structure
+
+	//Now post the document to blockchain
+	_, err := t.save_changes(stub, v)
+
+		if err != nil { fmt.Printf("updateAsset: Error saving changes: %s", err); return nil, errors.New("Error saving changes") }
+
+	return nil, nil
+
+}
+
+//=================================================================================================================================
+//	 Update Doc - Attaches document to a blockchain block
+//=================================================================================================================================
+func (t *SimpleChaincode) readDoc(stub shim.ChaincodeStubInterface, v Vehicle, caller string, caller_affiliation string, animals Animal) ([]byte, error) {
+
+
+	//if the transaction is fired by a person who owns this asset then he has the right to update
+	//if 	v.OwnerId == animals.Caller		{
+
+	bytes1, err := json.Marshal(v.AfDoc)
+	
+	var str bytes.Buffer
+	
+	str1 := string(bytes1)
+	msgpart1  := "{\"assetstate\":{\"asset\":{\"afDoc\":" 
+	msgpart2  := "},\"txnid\":\"\",\"txnts\":\"\"}" //txnid and txnts to be populated
+
+	str.WriteString(msgpart1)
+	str.WriteString(str1)
+	str.WriteString(msgpart2)
+	
+	bytes3 := []byte(str.String())
+
+	
+	
+	if err != nil { return nil, errors.New("READASSET: Invalid vehicle object") }
+
+	if 		v.OwnerId	== caller		||
+				caller  == REGULATOR	{
+
+					//return bytes, nil
+					return bytes3, nil
+	} else {
+				return nil, errors.New("Permission Denied. readAsset. The caller should be owner or Regulator.")
+	}
+
+
+
+}
+
+
 
 //=================================================================================================================================
 //	 Main - main - Starts up the chaincode
