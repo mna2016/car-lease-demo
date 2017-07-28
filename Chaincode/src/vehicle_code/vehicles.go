@@ -69,6 +69,8 @@ type Vehicle struct {
 }
 */
 
+
+
 //BEGIN new vehicle data structure
 type Vehicle struct {
 
@@ -126,7 +128,18 @@ type Animal struct {
 		V5cid           string `json:"v5cID"`
 
 		}
-	
+
+
+/* momentary structure to hol input json*/
+type InRequest struct {
+
+		AssetState struct {
+			Asset struct {	Anim	Animal } 
+		}
+		TxnId	string  `json:"txnid"`	
+		TxnTs	string  `json:"txnts"`	
+}
+		
 //==============================================================================================================================
 //	V5C Holder - Defines the structure that holds all the v5cIDs for vehicles that have been created.
 //				Used as an index when querying all vehicles.
@@ -312,11 +325,16 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
       //}
     
     var animals Animal
-    err2 := json.Unmarshal([]byte(Args[1]), &animals)
+    var inreq InRequest
+	//err2 := json.Unmarshal([]byte(Args[1]), &animals)
+	err2 := json.Unmarshal([]byte(Args[1]), &inreq)
 	if err2 != nil {
 		fmt.Println("error:", err2)
 	}
     
+	//Now assign the real arguments to object animal 
+	animals = inreq.AssetState.Asset.Anim
+	
 	// IMPORTANT: v5cid variable is used in most of the places in this contract
 	// the frontend will pass the field assetID as the
 	// copy assetID over to v5cid here
