@@ -1203,7 +1203,7 @@ func (t *SimpleChaincode) readDoc(stub shim.ChaincodeStubInterface, v Vehicle, c
 	
 	str1 := string(bytes1)
 	msgpart1  := "{\"assetstate\":{\"asset\":{\"afDoc\":" 
-	msgpart2  := "},\"txnid\":\"\",\"txnts\":\"\"}" //txnid and txnts to be populated
+	msgpart2  := "}},\"txnid\":\"\",\"txnts\":\"\"}" //txnid and txnts to be populated
 
 	str.WriteString(msgpart1)
 	str.WriteString(str1)
