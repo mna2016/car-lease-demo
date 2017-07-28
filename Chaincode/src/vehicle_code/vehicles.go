@@ -975,16 +975,26 @@ func (t *SimpleChaincode) get_vehicle_details(stub shim.ChaincodeStubInterface, 
 
 	bytes1, err := json.Marshal(v)
 	
-
+	
 	//make up the response in such a manner to have the response sandwiched
 	//between mspart1 and msgpart2. this is done to reformat the response 
 	//which the UI expects. The data stored on the blockchain will have no change 
 	//in structure. only the vehicle struct will be stored on blockchain. 
 	//This reformat is just an adjustment.
 
-	msgpart1  := []byte("{\"assetstate\":{\"asset\":")
-	msgpart2  := []byte("},\"txnid\":\"\",\"txnts\":\"\"}") //txnid and txnts to be populated
+	var str bytes.Buffer
+	
+	str1 := string(bytes1)
+	msgpart1  := "{\"assetstate\":{\"asset\":"
+	msgpart2  := "},\"txnid\":\"\",\"txnts\":\"\"}" //txnid and txnts to be populated
 
+	str.WriteString(msgpart1)
+	str.WriteString(str1)
+	str.WriteString(mspart2)
+	
+	bytes3 := []byte(str.String())
+
+	
 	//bytes2 := append(msgpart1,bytes,msgpart2)	
 	
 	//bytes2 :=  msgpart1 + bytes + msgpart2	
@@ -998,7 +1008,7 @@ func (t *SimpleChaincode) get_vehicle_details(stub shim.ChaincodeStubInterface, 
 				caller  == REGULATOR	{
 
 					//return bytes, nil
-					return bytes2, nil
+					return bytes3, nil
 	} else {
 				return nil, errors.New("Permission Denied. readAsset. The caller should be owner or Regulator.")
 	}
