@@ -1057,7 +1057,7 @@ func (t *SimpleChaincode) get_vehicle_details(stub shim.ChaincodeStubInterface, 
 
 func (t *SimpleChaincode) get_vehicle_details2(stub shim.ChaincodeStubInterface, v Vehicle, caller string, caller_affiliation string) ([]byte, error) {
 
-	bytes, err := json.Marshal(v)
+	bytes1, err := json.Marshal(v)
 	
 	//make up the response in such a manner to have the response sandwiched
 	//between mspart1 and msgpart2. this is done to reformat the response 
@@ -1075,6 +1075,7 @@ func (t *SimpleChaincode) get_vehicle_details2(stub shim.ChaincodeStubInterface,
 	str.WriteString(str1)
 	str.WriteString(msgpart2)
 	
+	bytes3 := []byte(str.String())
 	
 	
 	if err != nil { return nil, errors.New("READASSET: Invalid vehicle object") }
@@ -1083,7 +1084,7 @@ func (t *SimpleChaincode) get_vehicle_details2(stub shim.ChaincodeStubInterface,
 				caller  == REGULATOR	{
 
 					//return bytes, nil
-					return bytes, nil
+					return bytes3, nil
 	} else {
 				return nil, errors.New("Permission Denied. readAsset. The caller should be owner or Regulator.")
 	}
