@@ -1059,7 +1059,14 @@ func (t *SimpleChaincode) get_vehicle_details2(stub shim.ChaincodeStubInterface,
 
 	bytes, err := json.Marshal(v)
 	
-	//reformat the response as per UI format
+	//make up the response in such a manner to have the response sandwiched
+	//between mspart1 and msgpart2. this is done to reformat the response 
+	//which the UI expects. The data stored on the blockchain will have no change 
+	//in structure. only the vehicle struct will be stored on blockchain. 
+	//This reformat is just an adjustment.
+
+	var str bytes.Buffer
+	
 	str1 := string(bytes1)
 	msgpart1  := "{\"assetstate\":{{\"asset\":"
 	msgpart2  := "}},\"txnid\":\"\",\"txnts\":\"\"}" //txnid and txnts to be populated
