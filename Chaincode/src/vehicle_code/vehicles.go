@@ -413,6 +413,8 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 //=================================================================================================================================
 //	Query - Called on chaincode query. Takes a function name passed and calls that function. Passes the
 //  		initial arguments passed are passed on to the called function.
+
+
 //=================================================================================================================================
 func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 
@@ -425,10 +427,15 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
     // Get the args from the transaction proposal
     Args := stub.GetStringArgs()
     var animals Animal
-    err2 := json.Unmarshal([]byte(Args[1]), &animals)
+    var inreq InRequest
+	//err2 := json.Unmarshal([]byte(Args[1]), &animals)
+	err2 := json.Unmarshal([]byte(Args[1]), &inreq)
 	if err2 != nil {
 		fmt.Println("error:", err2)
 	}
+	
+	
+	animals = inreq.Asset
     
 	// IMPORTANT: v5cid variable is used in most of the places in this contract
 	// the frontend will pass the field assetID as the
@@ -1052,7 +1059,17 @@ func (t *SimpleChaincode) get_vehicle_details2(stub shim.ChaincodeStubInterface,
 
 	bytes, err := json.Marshal(v)
 	
+	//reformat the response as per UI format
+	str1 := string(bytes1)
+	msgpart1  := "{\"assetstate\":{{\"asset\":"
+	msgpart2  := "}},\"txnid\":\"\",\"txnts\":\"\"}" //txnid and txnts to be populated
 
+	str.WriteString(msgpart1)
+	str.WriteString(str1)
+	str.WriteString(msgpart2)
+	
+	
+	
 	if err != nil { return nil, errors.New("READASSET: Invalid vehicle object") }
 
 	if 		v.OwnerId	== caller		||
