@@ -465,7 +465,7 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 		return t.ping(stub)
 	} else if function == "readDoc" {
 		 v, err := t.retrieve_v5c(stub, animals.V5cid)
-		 err = nil
+		 fmt.Printf(err)
 		 return t.readDoc(stub, v, caller, caller_affiliation) 
 	}
 
