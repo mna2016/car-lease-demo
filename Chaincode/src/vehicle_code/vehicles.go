@@ -990,7 +990,7 @@ func (t *SimpleChaincode) get_vehicle_details(stub shim.ChaincodeStubInterface, 
 
 	str.WriteString(msgpart1)
 	str.WriteString(str1)
-	str.WriteString(mspart2)
+	str.WriteString(msgpart2)
 	
 	bytes3 := []byte(str.String())
 
