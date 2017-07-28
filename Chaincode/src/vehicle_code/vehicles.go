@@ -330,7 +330,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 	//Now assign the real arguments to object animal 
 	animals = inreq.Asset.Anim
 	
-	return nil, errors.New("INPUT REQUEST:" + Args[1]+ "animals struct :"+ animals.AssetID + ":" + animals.Caller + ":" )
+	return nil, errors.New("INPUT REQUEST:" + Args[1]+ "animals struct :"+ animals.AssetId + ":" + animals.Caller + ":" )
 	// IMPORTANT: v5cid variable is used in most of the places in this contract
 	// the frontend will pass the field assetID as the
 	// copy assetID over to v5cid here
