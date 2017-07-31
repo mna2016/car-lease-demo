@@ -1043,7 +1043,7 @@ func (t *SimpleChaincode) get_vehicle_details(stub shim.ChaincodeStubInterface, 
 
 	txnID := stub.GetTxID()
 	txntmsp,errN := stub.GetTxTimestamp()
-	t1, e := txntmsp.Parse(
+	t1, e := txntmsp.Timestamp.Parse(
         time.RFC3339,
         "2012-11-01T22:08:41+00:00")
 	_ = errN
