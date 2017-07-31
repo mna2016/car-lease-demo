@@ -1096,12 +1096,34 @@ func (t *SimpleChaincode) get_vehicle_details2(stub shim.ChaincodeStubInterface,
 	var str bytes.Buffer
 	
 	str1 := string(bytes1)
+	/*
 	msgpart1  := "{\"assetstate\":{{\"asset\":"
 	msgpart2  := "}},\"txnid\":\"\",\"txnts\":\"\"}" //txnid and txnts to be populated
 
 	str.WriteString(msgpart1)
 	str.WriteString(str1)
 	str.WriteString(msgpart2)
+	*/
+	msgpart1  := "{\"assetstate\":{\"asset\":"
+	
+
+	txnID := stub.GetTxID()
+	txntmsp,errN := stub.GetTxTimestamp()
+	time1 := time.Unix(txntmsp.Seconds, int64(txntmsp.Nanos)).String()
+	_ = errN
+	
+	msgpart2  := "},\"txnid\":\""
+	msgpart3  := "\",\"txnts\":\""
+	msgpart4  := "\"}" //txnid and txnts to be populated
+	
+	str.WriteString(msgpart1)
+	str.WriteString(str1)
+	str.WriteString(msgpart2)
+	str.WriteString(txnID)
+	str.WriteString(msgpart3)
+	str.WriteString(time1)
+	str.WriteString(msgpart4)
+	
 	
 	bytes3 := []byte(str.String())
 	
