@@ -1042,12 +1042,15 @@ func (t *SimpleChaincode) get_vehicle_details(stub shim.ChaincodeStubInterface, 
 	
 
 	txnID := stub.GetTxID()
-	//txntmsp,errN := stub.GetTxTimestamp()
+	txntmsp,errN := stub.GetTxTimestamp()
 	/*t1, e := txntmsp.Timestamp.Parse(
         time.RFC3339,
         "2012-11-01T22:08:41+00:00")*/
 	//_ = errN
 	//_ = e
+	//time.Unix(timestamp.Seconds, int64(timestamp.Nanos)).String()
+	time1 := txntmsp.Unix(timestamp.Seconds, int64(timestamp.Nanos)).String()
+	
 	
 	msgpart2  := "},\"txnid\":\""
 	msgpart3  := "\",\"txnts\":\""
@@ -1058,7 +1061,7 @@ func (t *SimpleChaincode) get_vehicle_details(stub shim.ChaincodeStubInterface, 
 	str.WriteString(msgpart2)
 	str.WriteString(txnID)
 	str.WriteString(msgpart3)
-	//str.WriteString(txntmsp.String())
+	str.WriteString(time1)
 	str.WriteString(msgpart4)
 	
 	
@@ -1149,7 +1152,7 @@ func (t *SimpleChaincode) get_vehicles(stub shim.ChaincodeStubInterface, caller 
 
 		if err != nil {return nil, errors.New("Failed to retrieve V5C or AssetId")}
 
-		temp, err = t.get_vehicle_details(stub, v, caller, caller_affiliation)
+		temp, err = t.get_vehicle_details2(stub, v, caller, caller_affiliation)
 
 		if err == nil {
 			result += string(temp) + ","
