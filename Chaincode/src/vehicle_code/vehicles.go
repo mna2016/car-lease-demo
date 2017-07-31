@@ -1050,7 +1050,7 @@ func (t *SimpleChaincode) get_vehicle_details(stub shim.ChaincodeStubInterface, 
 	//_ = e
 	//time.Unix(timestamp.Seconds, int64(timestamp.Nanos)).String()
 	time1 := time.Unix(txntmsp.Seconds, int64(txntmsp.Nanos)).String()
-	
+	_ = errN
 	
 	msgpart2  := "},\"txnid\":\""
 	msgpart3  := "\",\"txnts\":\""
