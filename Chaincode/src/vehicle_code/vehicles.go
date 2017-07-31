@@ -3,7 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
-//	"time"
+	"time"
 	"bytes"
 	"unicode/utf8"
 
@@ -1049,7 +1049,7 @@ func (t *SimpleChaincode) get_vehicle_details(stub shim.ChaincodeStubInterface, 
 	//_ = errN
 	//_ = e
 	//time.Unix(timestamp.Seconds, int64(timestamp.Nanos)).String()
-	time1 := txntmsp.Unix(timestamp.Seconds, int64(timestamp.Nanos)).String()
+	time1 := time.Unix(txntmsp.Seconds, int64(txntmsp.Nanos)).String()
 	
 	
 	msgpart2  := "},\"txnid\":\""
