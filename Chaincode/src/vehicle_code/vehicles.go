@@ -1038,11 +1038,24 @@ func (t *SimpleChaincode) get_vehicle_details(stub shim.ChaincodeStubInterface, 
 	
 	str1 := string(bytes1)
 	msgpart1  := "{\"assetstate\":{\"asset\":"
-	msgpart2  := "},\"txnid\":\"\",\"txnts\":\"\"}" //txnid and txnts to be populated
+	
 
+	txnID := stub.GetTxID()
+	txntmsp,errN := stub.GetTxTimestamp()
+	_ = errN
+	
+	msgpart2  := "},\"txnid\":\""
+	msgpart3  := "\",\"txnts\":\""
+	msgpart4  := "\"}" //txnid and txnts to be populated
+	
 	str.WriteString(msgpart1)
 	str.WriteString(str1)
 	str.WriteString(msgpart2)
+	str.WriteString(txnID)
+	str.WriteString(msgpart3)
+	str.WriteString(txntmsp)
+	str.WriteString(msgpart4)
+	
 	
 	bytes3 := []byte(str.String())
 
