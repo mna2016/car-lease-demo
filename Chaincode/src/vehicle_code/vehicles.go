@@ -1058,7 +1058,7 @@ func (t *SimpleChaincode) get_vehicle_details(stub shim.ChaincodeStubInterface, 
 	str.WriteString(msgpart2)
 	str.WriteString(txnID)
 	str.WriteString(msgpart3)
-	str.WriteString(txntmsp.Timestamp.String)
+	//str.WriteString(txntmsp.String())
 	str.WriteString(msgpart4)
 	
 	
