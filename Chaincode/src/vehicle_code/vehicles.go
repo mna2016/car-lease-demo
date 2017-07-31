@@ -1149,7 +1149,7 @@ func (t *SimpleChaincode) get_vehicles(stub shim.ChaincodeStubInterface, caller 
 
 		if err != nil {return nil, errors.New("Failed to retrieve V5C or AssetId")}
 
-		temp, err = t.get_vehicle_details2(stub, v, caller, caller_affiliation)
+		temp, err = t.get_vehicle_details(stub, v, caller, caller_affiliation)
 
 		if err == nil {
 			result += string(temp) + ","
