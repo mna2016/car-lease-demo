@@ -1044,7 +1044,7 @@ func (t *SimpleChaincode) get_vehicle_details(stub shim.ChaincodeStubInterface, 
 	txnID := stub.GetTxID()
 	txntmsp,errN := stub.GetTxTimestamp()
 	
-	out1 := "01/02/2006 03:04:10:000000"
+	out1 := "2017-07-13T14:23:45.262161407Z"
 	timetemp1 := time.Unix(txntmsp.Seconds, int64(txntmsp.Nanos))
 	time1 := timetemp1.Format(out1)	
 	//time1 := timetemp.String()
