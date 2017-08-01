@@ -465,6 +465,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 	//docID and docStr will get populated if the request is meant for Document update
     docID := inreq.Document.DocId
     docStr := inreq.Document.DocStr
+    errors.New("inreq Details docID: "+ docID + " docStr:" + docStr)
 
     //fmt.Println("Input Arguments are: %v", animals)
     //return nil, errors.New("animals struct :"+ animals.V5cid + ":" + animals.Make + ":")
