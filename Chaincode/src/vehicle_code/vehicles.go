@@ -573,7 +573,7 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 		return t.ping(stub)
 	} else if function == "readDoc" {
 		 
-		 return t.readDoc(stub, caller, docID, docStr) 
+		 return t.readDoc(stub, caller, docID) 
 		 
 	}
 
