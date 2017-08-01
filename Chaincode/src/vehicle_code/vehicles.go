@@ -469,6 +469,8 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
     //fmt.Println("Input Arguments are: %v", animals)
     //return nil, errors.New("animals struct :"+ animals.V5cid + ":" + animals.Make + ":")
 
+    function == "updateDoc" 		{ return t.updateDoc(stub, caller, docID, docStr) }
+
 	if function == "create_vehicle" {
         return t.create_vehicle(stub, "DVLA", AUTHORITY, animals.V5cid)
 	} else if function == "createAsset" {
@@ -508,9 +510,9 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
         } else if function == "update_colour" 		{ return t.update_colour(stub, v, caller, caller_affiliation, args[0])
 		} else if function == "scrap_vehicle" 		{ return t.scrap_vehicle(stub, v, caller, caller_affiliation) 
 		} else*/ 
-				if function == "updateAsset" 		{ return t.updateAsset(stub, v, caller, caller_affiliation,"dummy new value",animals) 
+				if function == "updateAsset" 		{ return t.updateAsset(stub, v, caller, caller_affiliation,"dummy new value",animals) }
 				//} else if function == "updateDoc" 		{ return t.updateDoc(stub, v, caller, caller_affiliation,animals) }
-				} else if function == "updateDoc" 		{ return t.updateDoc(stub, caller, docID, docStr) }
+				
 		
 	}
 	}
