@@ -552,9 +552,9 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 	caller = animals.Caller
     caller_affiliation = AUTHORITY
     
-    //docID and docStr will get populated if the request is meant for Document query
+    //docID  will get populated if the request is meant for Document query
     docID := inreq.Document.DocId
-    docStr := inreq.Document.DocStr
+
 
 
 	if function == "get_vehicle_details" || function == "readAsset"  {
