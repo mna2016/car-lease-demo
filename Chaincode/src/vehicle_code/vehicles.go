@@ -469,7 +469,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
     //fmt.Println("Input Arguments are: %v", animals)
     //return nil, errors.New("animals struct :"+ animals.V5cid + ":" + animals.Make + ":")
 
-    function == "updateDoc" 		{ return t.updateDoc(stub, caller, docID, docStr) }
+    if function == "updateDoc" 		{ return t.updateDoc(stub, caller, docID, docStr) }
 
 	if function == "create_vehicle" {
         return t.create_vehicle(stub, "DVLA", AUTHORITY, animals.V5cid)
