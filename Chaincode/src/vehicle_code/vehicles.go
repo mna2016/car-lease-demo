@@ -1026,6 +1026,8 @@ func (t *SimpleChaincode) scrap_vehicle(stub shim.ChaincodeStubInterface, v Vehi
 //=================================================================================================================================
 func (t *SimpleChaincode) get_vehicle_details(stub shim.ChaincodeStubInterface, v Vehicle, caller string, caller_affiliation string) ([]byte, error) {
 
+
+	v.Caller = caller //update the vehicle's caller with the userID who called
 	bytes1, err := json.Marshal(v)
 	
 	
