@@ -1044,7 +1044,6 @@ func (t *SimpleChaincode) get_vehicle_details(stub shim.ChaincodeStubInterface, 
 	txnID := stub.GetTxID()
 	txntmsp,errN := stub.GetTxTimestamp()
 	
-	//out1 := "2017-07-13T14:23:45.262161407Z"
 	timetemp1 := time.Unix(txntmsp.Seconds, int64(txntmsp.Nanos))
 	time1 := timetemp1.Format(time.RFC3339)	
 	//time1 := timetemp.String()
@@ -1109,8 +1108,15 @@ func (t *SimpleChaincode) get_vehicle_details2(stub shim.ChaincodeStubInterface,
 
 	txnID := stub.GetTxID()
 	txntmsp,errN := stub.GetTxTimestamp()
-	time1 := time.Unix(txntmsp.Seconds, int64(txntmsp.Nanos)).String()
+	
+	//time1 := time.Unix(txntmsp.Seconds, int64(txntmsp.Nanos)).String()
+	//_ = errN
+	
+	timetemp1 := time.Unix(txntmsp.Seconds, int64(txntmsp.Nanos))
+	time1 := timetemp1.Format(time.RFC3339)	
+	//time1 := timetemp.String()
 	_ = errN
+	
 	
 	msgpart2  := "},\"txnid\":\""
 	msgpart3  := "\",\"txnts\":\""
@@ -1250,7 +1256,12 @@ func (t *SimpleChaincode) readDoc(stub shim.ChaincodeStubInterface, v Vehicle, c
 
 	txnID := stub.GetTxID()
 	txntmsp,errN := stub.GetTxTimestamp()
-	time1 := time.Unix(txntmsp.Seconds, int64(txntmsp.Nanos)).String()
+	
+	//time1 := time.Unix(txntmsp.Seconds, int64(txntmsp.Nanos)).String()
+	//_ = errN
+	timetemp1 := time.Unix(txntmsp.Seconds, int64(txntmsp.Nanos))
+	time1 := timetemp1.Format(time.RFC3339)	
+	//time1 := timetemp.String()
 	_ = errN
 	
 	msgpart2  := "},\"txnid\":\""
