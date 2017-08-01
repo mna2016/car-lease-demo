@@ -255,8 +255,7 @@ func (t *SimpleChaincode) add_ecert(stub shim.ChaincodeStubInterface, name strin
 //	 Update Doc - Attaches document to a blockchain block
 //=================================================================================================================================
 //func (t *SimpleChaincode) updateDoc(stub shim.ChaincodeStubInterface, v Vehicle, caller string, caller_affiliation string, animals Animal) ([]byte, error) {
-func (t* SimpleChaincode) updateDoc(stub shim.ChaincodeStubInterface, caller string, docID string, codedDoc string) ([]byte, error)
-{
+func (t* SimpleChaincode) updateDoc(stub shim.ChaincodeStubInterface, caller string, docID string, codedDoc string) ([]byte, error){
 //if the transaction is fired by a person who owns this asset then he has the right to update
 
     if	codedDoc					     == ""    { return nil, errors.New("Document string cannot be empty!")}
@@ -1316,66 +1315,6 @@ func (t *SimpleChaincode) check_unique_v5c(stub shim.ChaincodeStubInterface, v5c
 	} else {
 		return []byte("true"), nil
 	}
-}
-
-
-//=================================================================================================================================
-//	 Update Doc - Attaches document to a blockchain block
-//=================================================================================================================================
-func (t *SimpleChaincode) readDoc(stub shim.ChaincodeStubInterface, v Vehicle, caller string, caller_affiliation string) ([]byte, error) {
-
-
-	//if the transaction is fired by a person who owns this asset then he has the right to update
-	//if 	v.OwnerId == animals.Caller		{
-
-	bytes1, err := json.Marshal(v.AfDoc)
-	
-	var str bytes.Buffer
-	
-	str1 := string(bytes1)
-		msgpart1  := "{\"assetstate\":{\"asset\":"
-	
-
-	txnID := stub.GetTxID()
-	txntmsp,errN := stub.GetTxTimestamp()
-	
-	//time1 := time.Unix(txntmsp.Seconds, int64(txntmsp.Nanos)).String()
-	//_ = errN
-	timetemp1 := time.Unix(txntmsp.Seconds, int64(txntmsp.Nanos))
-	time1 := timetemp1.Format(time.RFC3339)	
-	//time1 := timetemp.String()
-	_ = errN
-	
-	msgpart2  := "},\"txnid\":\""
-	msgpart3  := "\",\"txnts\":\""
-	msgpart4  := "\"}" //txnid and txnts to be populated
-	
-	str.WriteString(msgpart1)
-	str.WriteString(str1)
-	str.WriteString(msgpart2)
-	str.WriteString(txnID)
-	str.WriteString(msgpart3)
-	str.WriteString(time1)
-	str.WriteString(msgpart4)
-	
-
-	bytes3 := []byte(str.String())
-
-	
-	
-	if err != nil { return nil, errors.New("READASSET: Invalid vehicle object") }
-
-	if 		v.OwnerId	== caller		||
-				caller  == REGULATOR	{
-
-					//return bytes, nil
-					return bytes3, nil
-	} else {
-				return nil, errors.New("Permission Denied. readAsset. The caller should be owner or Regulator.")
-	}
-
-
-
 }
 
 
