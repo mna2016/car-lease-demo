@@ -264,7 +264,7 @@ func (t* SimpleChaincode) updateDoc(stub shim.ChaincodeStubInterface, caller str
 	//write document to world state. docID is the key. 
 	err := stub.PutState(docID, []byte(codedDoc))
 
-	if err == nil {
+	if err != nil {
 		return nil, errors.New("Error storing Document for caller: " + caller + " docID: " + docID)
 	}
 
@@ -465,7 +465,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 	//docID and docStr will get populated if the request is meant for Document update
     docID := inreq.Document.DocId
     docStr := inreq.Document.DocStr
-    errors.New("inreq Details docID: "+ docID + " docStr:" + docStr)
+    //errors.New("inreq Details docID: "+ docID + " docStr:" + docStr)
 
     //fmt.Println("Input Arguments are: %v", animals)
     //return nil, errors.New("animals struct :"+ animals.V5cid + ":" + animals.Make + ":")
