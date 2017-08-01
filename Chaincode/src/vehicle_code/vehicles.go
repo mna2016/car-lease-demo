@@ -1052,6 +1052,8 @@ func (t *SimpleChaincode) get_vehicle_details(stub shim.ChaincodeStubInterface, 
 	time1 := time.Unix(txntmsp.Seconds, int64(txntmsp.Nanos)).String()
 	_ = errN
 	
+	out1 := "01/02/2006 03:04:10:000000"
+    
 	msgpart2  := "},\"txnid\":\""
 	msgpart3  := "\",\"txnts\":\""
 	msgpart4  := "\"}" //txnid and txnts to be populated
@@ -1061,7 +1063,8 @@ func (t *SimpleChaincode) get_vehicle_details(stub shim.ChaincodeStubInterface, 
 	str.WriteString(msgpart2)
 	str.WriteString(txnID)
 	str.WriteString(msgpart3)
-	str.WriteString(time1)
+	//str.WriteString(time1)
+	str.WriteString(time1.Format(out1))
 	str.WriteString(msgpart4)
 	
 	
