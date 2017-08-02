@@ -1196,6 +1196,8 @@ func (t *SimpleChaincode) get_vehicle_details(stub shim.ChaincodeStubInterface, 
 
 func (t *SimpleChaincode) get_vehicle_details2(stub shim.ChaincodeStubInterface, v Vehicle, caller string, caller_affiliation string) ([]byte, error) {
 
+	//blank out AfDoc as it may result in huge response in case documents are present on this particular asset
+	v.AfDoc = ""
 	bytes1, err := json.Marshal(v)
 	
 	//make up the response in such a manner to have the response sandwiched
