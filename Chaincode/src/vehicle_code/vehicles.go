@@ -160,11 +160,6 @@ type InRequest struct {
 		Caller				string  `json:"caller"`		//the UI/person who fired the transaction
 		V5cid           string `json:"v5cID"`
 		} 
-		Document struct {
-
-			DocId				string	`json:"docID"`
-			DocStr				string	`json:"docStr"`
-		}
 }
 		
 //==============================================================================================================================
@@ -184,16 +179,6 @@ type User_and_eCert struct {
 	Identity string `json:"identity"`
 	eCert string `json:"ecert"`
 }
-
-//==============================================================================================================================
-//	Doc - Struct for storing the JSON of a user and their ecert
-//==============================================================================================================================
-
-type Doc_Holder struct {
-	DocId string `json:"docid"`
-	CodedDoc string `json:"codeddoc"`
-}
-
 
 //==============================================================================================================================
 //	Init Function - Called when the user deploys the chaincode
@@ -250,87 +235,6 @@ func (t *SimpleChaincode) add_ecert(stub shim.ChaincodeStubInterface, name strin
 	return nil, nil
 
 }
-
-//=================================================================================================================================
-//	 Update Doc - Attaches document to a blockchain block
-//=================================================================================================================================
-//func (t *SimpleChaincode) updateDoc(stub shim.ChaincodeStubInterface, v Vehicle, caller string, caller_affiliation string, animals Animal) ([]byte, error) {
-func (t* SimpleChaincode) updateDoc(stub shim.ChaincodeStubInterface, caller string, docID string, codedDoc string) ([]byte, error){
-//if the transaction is fired by a person who owns this asset then he has the right to update
-
-    if	codedDoc					     == ""    { return nil, errors.New("Document string cannot be empty!")}
-	if  utf8.RuneCountInString(codedDoc) > 250000 { return nil, errors.New("Document string cannot be larger than 250KB!")}
-
-	//write document to world state. docID is the key. 
-	err := stub.PutState(docID, []byte(codedDoc))
-
-	if err != nil {
-		return nil, errors.New("Error storing Document for caller: " + caller + " docID: " + docID)
-	}
-
-	return nil, nil
-
-}
-
-//=================================================================================================================================
-//	 Update Doc - Attaches document to a blockchain block
-//=================================================================================================================================
-//func (t *SimpleChaincode) readDoc(stub shim.ChaincodeStubInterface, v Vehicle, caller string, caller_affiliation string) ([]byte, error) {
-func (t *SimpleChaincode) readDoc(stub shim.ChaincodeStubInterface, caller string, docID string) ([]byte, error) {
-
-
-	//read the document from world state
-	decodedDoc, err := stub.GetState(docID)
-
-	if err != nil { return nil, errors.New("Couldn't retrieve Document docID: " + docID) }
-
-	//return decodedDoc, nil
-
-	//if the transaction is fired by a person who owns this asset then he has the right to update
-	//if 	v.OwnerId == animals.Caller		{
-
-	bytes1, err := json.Marshal(decodedDoc)
-	
-	var str bytes.Buffer
-	
-	str1 := string(bytes1)
-	msgpart1  := "{\"assetstate\":{\"document\":"
-	
-
-	txnID := stub.GetTxID()
-	txntmsp,errN := stub.GetTxTimestamp()
-	
-	//time1 := time.Unix(txntmsp.Seconds, int64(txntmsp.Nanos)).String()
-	//_ = errN
-	timetemp1 := time.Unix(txntmsp.Seconds, int64(txntmsp.Nanos))
-	time1 := timetemp1.Format(time.RFC3339)	
-	//time1 := timetemp.String()
-	_ = errN
-	
-	msgpart2  := "},\"txnid\":\""
-	msgpart3  := "\",\"txnts\":\""
-	msgpart4  := "\"}" //txnid and txnts to be populated
-	
-
-	//concate the different portions of the response
-	str.WriteString(msgpart1)
-	str.WriteString(str1)
-	str.WriteString(msgpart2)
-	str.WriteString(txnID)
-	str.WriteString(msgpart3)
-	str.WriteString(time1)
-	str.WriteString(msgpart4)
-	
-
-	//now convert the final response to []byte
-	bytes3 := []byte(str.String())
-
-	
-	return bytes3,nil
-
-}
-
-
 
 //==============================================================================================================================
 //	 get_caller - Retrieves the username of the user who invoked the chaincode.
@@ -425,7 +329,6 @@ func (t *SimpleChaincode) save_changes(stub shim.ChaincodeStubInterface, v Vehic
 //==============================================================================================================================
 func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 
-	
 	caller, caller_affiliation, err := t.get_caller_data(stub)
 
 	//if err != nil { return nil, errors.New("Error retrieving caller information")}
@@ -442,8 +345,6 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
      // if len(args) != 2 {
      //   return nil("Incorrect arguments. Expecting a key and a value")
       //}
-    
-
     
     var animals Animal
     var inreq InRequest
@@ -462,15 +363,8 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 	// copy assetID over to v5cid here
 	animals.V5cid = animals.AssetId
 	
-	//docID and docStr will get populated if the request is meant for Document update
-    docID := inreq.Document.DocId
-    docStr := inreq.Document.DocStr
-    //errors.New("inreq Details docID: "+ docID + " docStr:" + docStr)
-
     //fmt.Println("Input Arguments are: %v", animals)
     //return nil, errors.New("animals struct :"+ animals.V5cid + ":" + animals.Make + ":")
-
-    if function == "updateDoc" 		{ return t.updateDoc(stub, caller, docID, docStr) }
 
 	if function == "create_vehicle" {
         return t.create_vehicle(stub, "DVLA", AUTHORITY, animals.V5cid)
@@ -511,9 +405,8 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
         } else if function == "update_colour" 		{ return t.update_colour(stub, v, caller, caller_affiliation, args[0])
 		} else if function == "scrap_vehicle" 		{ return t.scrap_vehicle(stub, v, caller, caller_affiliation) 
 		} else*/ 
-				if function == "updateAsset" 		{ return t.updateAsset(stub, v, caller, caller_affiliation,"dummy new value",animals) }
-				//} else if function == "updateDoc" 		{ return t.updateDoc(stub, v, caller, caller_affiliation,animals) }
-				
+				if function == "updateAsset" 		{ return t.updateAsset(stub, v, caller, caller_affiliation,"dummy new value",animals) 
+				} else if function == "updateDoc" 		{ return t.updateDoc(stub, v, caller, caller_affiliation,animals) }
 		
 	}
 	}
@@ -555,10 +448,7 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 	caller = animals.Caller
     caller_affiliation = AUTHORITY
     
-    //docID  will get populated if the request is meant for Document query
-    docID := inreq.Document.DocId
-
-
+    
 
 	if function == "get_vehicle_details" || function == "readAsset"  {
 		if len(args) != 1 { fmt.Printf("Incorrect number of arguments passed"); return nil, errors.New("QUERY: Incorrect number of arguments passed") }
@@ -575,9 +465,9 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 	} else if function == "ping" {
 		return t.ping(stub)
 	} else if function == "readDoc" {
-		 
-		 return t.readDoc(stub, caller, docID) 
-		 
+		 v, err := t.retrieve_v5c(stub, animals.V5cid)
+		 _ = err
+		 return t.readDoc(stub, v, caller, caller_affiliation) 
 	}
 
 	return nil, errors.New("Received unknown function invocation " + function)
@@ -1196,8 +1086,9 @@ func (t *SimpleChaincode) get_vehicle_details(stub shim.ChaincodeStubInterface, 
 
 func (t *SimpleChaincode) get_vehicle_details2(stub shim.ChaincodeStubInterface, v Vehicle, caller string, caller_affiliation string) ([]byte, error) {
 
-	//blank out AfDoc as it may result in huge response in case documents are present on this particular asset
+	//blank out v.AfDoc. Because readAllAssets will have huge response incase the asset has documents attached
 	v.AfDoc = ""
+
 	bytes1, err := json.Marshal(v)
 	
 	//make up the response in such a manner to have the response sandwiched
@@ -1320,6 +1211,94 @@ func (t *SimpleChaincode) check_unique_v5c(stub shim.ChaincodeStubInterface, v5c
 	} else {
 		return []byte("true"), nil
 	}
+}
+
+//=================================================================================================================================
+//	 Update Doc - Attaches document to a blockchain block
+//=================================================================================================================================
+func (t *SimpleChaincode) updateDoc(stub shim.ChaincodeStubInterface, v Vehicle, caller string, caller_affiliation string, animals Animal) ([]byte, error) {
+
+//if the transaction is fired by a person who owns this asset then he has the right to update
+	if 	v.OwnerId == animals.Caller		{
+					
+					if	animals.AfDoc					== "" 	{ return nil, errors.New("AfDoc cannot be empty when updateDoc is called!")}
+
+					if  utf8.RuneCountInString(animals.AfDoc) > 250000 { return nil, errors.New("AfDoc cannot be larger than 250KB!")}
+
+					} else {
+
+		return nil, errors.New(fmt.Sprint("Permission denied. updateAsset %t %t" + v.OwnerId == caller, caller_affiliation == MANUFACTURER))
+	}
+	
+	v.AssetId = v.V5cID	//assetId and v5cid are the same thing. 					
+	v.AfDoc = animals.AfDoc //move input to vehicle structure
+
+	//Now post the document to blockchain
+	_, err := t.save_changes(stub, v)
+
+		if err != nil { fmt.Printf("updateAsset: Error saving changes: %s", err); return nil, errors.New("Error saving changes") }
+
+	return nil, nil
+
+}
+
+//=================================================================================================================================
+//	 Update Doc - Attaches document to a blockchain block
+//=================================================================================================================================
+func (t *SimpleChaincode) readDoc(stub shim.ChaincodeStubInterface, v Vehicle, caller string, caller_affiliation string) ([]byte, error) {
+
+
+	//if the transaction is fired by a person who owns this asset then he has the right to update
+	//if 	v.OwnerId == animals.Caller		{
+
+	bytes1, err := json.Marshal(v.AfDoc)
+	
+	var str bytes.Buffer
+	
+	str1 := string(bytes1)
+		msgpart1  := "{\"assetstate\":{\"asset\":"
+	
+
+	txnID := stub.GetTxID()
+	txntmsp,errN := stub.GetTxTimestamp()
+	
+	//time1 := time.Unix(txntmsp.Seconds, int64(txntmsp.Nanos)).String()
+	//_ = errN
+	timetemp1 := time.Unix(txntmsp.Seconds, int64(txntmsp.Nanos))
+	time1 := timetemp1.Format(time.RFC3339)	
+	//time1 := timetemp.String()
+	_ = errN
+	
+	msgpart2  := "},\"txnid\":\""
+	msgpart3  := "\",\"txnts\":\""
+	msgpart4  := "\"}" //txnid and txnts to be populated
+	
+	str.WriteString(msgpart1)
+	str.WriteString(str1)
+	str.WriteString(msgpart2)
+	str.WriteString(txnID)
+	str.WriteString(msgpart3)
+	str.WriteString(time1)
+	str.WriteString(msgpart4)
+	
+
+	bytes3 := []byte(str.String())
+
+	
+	
+	if err != nil { return nil, errors.New("READASSET: Invalid vehicle object") }
+
+	if 		v.OwnerId	== caller		||
+				caller  == REGULATOR	{
+
+					//return bytes, nil
+					return bytes3, nil
+	} else {
+				return nil, errors.New("Permission Denied. readAsset. The caller should be owner or Regulator.")
+	}
+
+
+
 }
 
 
