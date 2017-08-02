@@ -594,7 +594,7 @@ func (t *SimpleChaincode) createAsset(stub shim.ChaincodeStubInterface, caller s
 		PoDma				:= "\"poDma\":\""+ animals.PoDma +"\", "
 		PoSupp				:= "\"poSupp\":\""+ animals.PoSupp +"\", "
 		DmaDelDate			:= "\"dmaDelDate\":\""+ animals.DmaDelDate +"\", "
-		AfDelDate			:= "\"afDelDate\":\""+ animls.AfDelDate +"\", "
+		AfDelDate			:= "\"afDelDate\":\""+ animals.AfDelDate +"\", "
 		TruckMod			:= "\"truckMod\":\""+ animals.TruckMod +"\", "
 		TruckPDate			:= "\"truckPdate\":\""+ animals.TruckPDate +"\", "
 		TruckChnum			:= "\"truckChnum\":\""+ animals.TruckChnum +"\", "
