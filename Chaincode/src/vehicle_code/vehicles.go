@@ -369,7 +369,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 	if function == "create_vehicle" {
         return t.create_vehicle(stub, "DVLA", AUTHORITY, animals.V5cid)
 	} else if function == "createAsset" {
-		return t.createAsset(stub, "DVLA", AUTHORITY, animals.V5cid)
+		return t.createAsset(stub, "DVLA", AUTHORITY, animals.V5cid, animals)
     } else if function == "ping" {
         return t.ping(stub)
     } else { 																				// If the function is not a create then there must be a *** so we need to retrieve the ***.
@@ -560,11 +560,11 @@ func (t *SimpleChaincode) create_vehicle(stub shim.ChaincodeStubInterface, calle
 //=================================================================================================================================
 //	 Create Asset - Creates the initial JSON for the asset and then saves it to the ledger.
 //=================================================================================================================================
-func (t *SimpleChaincode) createAsset(stub shim.ChaincodeStubInterface, caller string, caller_affiliation string, v5cID string) ([]byte, error) {
+func (t *SimpleChaincode) createAsset(stub shim.ChaincodeStubInterface, caller string, caller_affiliation string, v5cID string,animals Animal) ([]byte, error) {
 	var v Vehicle
 
 	//Initialize variables which will make up the JSON structure that will be written to world state
-		TransactionType 	:= "\"transactionType\":\"UNDEFINED\", "
+	/*	TransactionType 	:= "\"transactionType\":\"UNDEFINED\", "
 		OwnerId				:= "\"ownerId\":\""+REGULATOR+"\", "			//owner at the time of creation is always regulator
 		AssetId				:= "\"assetID\":\""+v5cID+"\", "				//NOTE:assetId changed to assetID based on UI developer request
 		MatnrAf				:= "\"matnrAf\":\"UNDEFINED\", "
@@ -585,8 +585,29 @@ func (t *SimpleChaincode) createAsset(stub shim.ChaincodeStubInterface, caller s
 		AfDoc				:= "\"afDoc\":\"UNDEFINED\", "
 		Caller				:= "\"caller\":\"UNDEFINED\" "
 		v5c_ID         		:= "\"v5cID\":\""+v5cID+"\", "							// Variables to define the JSON
+	*/
 
-
+		TransactionType 	:= "\"transactionType\":\""+animals.TransactionType +"\", "
+		OwnerId				:= "\"ownerId\":\""+REGULATOR+"\", "			//owner at the time of creation is always regulator. NOTE: this may have to change
+		AssetId				:= "\"assetID\":\""+v5cID+"\", "				//NOTE:assetId changed to assetID based on UI developer request
+		MatnrAf				:= "\"matnrAf\":\""+ animals.MatnrAf +"\", "
+		PoDma				:= "\"poDma\":\""+ animals.PoDma +"\", "
+		PoSupp				:= "\"poSupp\":\""+ animals.PoSupp +"\", "
+		DmaDelDate			:= "\"dmaDelDate\":\""+ animals.DmaDelDate +"\", "
+		AfDelDate			:= "\"afDelDate\":\""+ animls.AfDelDate +"\", "
+		TruckMod			:= "\"truckMod\":\""+ animals.TruckMod +"\", "
+		TruckPDate			:= "\"truckPdate\":\""+ animals.TruckPDate +"\", "
+		TruckChnum			:= "\"truckChnum\":\""+ animals.TruckChnum +"\", "
+		TruckEnnum			:= "\"truckEnnum\":\""+ animals.TruckEnnum +"\", "
+		SuppTest			:= "\"suppTest\":\""+ animals.SuppTest +"\", "
+		GrDma				:= "\"grDma\":\""+ animals.GrDma +"\", "
+		GrAf				:= "\"grAf\":\""+ animals.GrAf +"\", "
+		DmaMasdat			:= "\"dmaMasdat\":\""+ animals.DmaMasdat +"\", "
+		AfDmaTest			:= "\"afDmaTest\":\""+ animals.AfDmaTest +"\", "
+		DmaDelCert			:= "\"dmaDelCert\":\""+ animals.DmaDelCert +"\", "
+		AfDoc				:= "\"afDoc\":\""+ animals.AfDoc +"\", "
+		Caller				:= "\"caller\":\""+ "" +"\", "							//leaving caller blank for now
+		v5c_ID         		:= "\"v5cID\":\""+v5cID+"\", "							// Variables to define the JSON
 
 	vehicle_json := "{"+v5c_ID+TransactionType+OwnerId+AssetId+MatnrAf+PoDma+PoSupp+DmaDelDate+AfDelDate+TruckMod+TruckPDate+TruckChnum+TruckEnnum+SuppTest+GrDma+GrAf+DmaMasdat+AfDmaTest+DmaDelCert+AfDoc+Caller+"}" 	// Concatenates the variables to create the total JSON object
 
