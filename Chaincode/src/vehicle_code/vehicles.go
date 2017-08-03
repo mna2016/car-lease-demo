@@ -79,11 +79,12 @@ type Vehicle struct {
 
 		TransactionType 	string	`json:"transactionType"`
 		OwnerId				string	`json:"ownerId"`
-		AssetId				string	`json:"assetId"`
+		//AssetId				string	`json:"assetId"`
+		AssetId				string	`json:"assetId"` 	//change assetId to assetID	
 		MatnrAf				string	`json:"matnrAf"`
 		PoDma				string	`json:"poDma"`
 		PoSupp				string	`json:"poSupp"`
-		DmaDelDate			string	`json:"dmaDelDate"`
+		DmaDelDate			string	`json:"dmaDelDate"
 		AfDelDate			string	`json:"afDelDate"`
 		TruckMod			string	`json:"truckMod"`
 		TruckPDate			string	`json:"truckPdate"`
