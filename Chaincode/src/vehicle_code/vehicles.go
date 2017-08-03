@@ -588,7 +588,8 @@ func (t *SimpleChaincode) createAsset(stub shim.ChaincodeStubInterface, caller s
 	*/
 
 		TransactionType 	:= "\"transactionType\":\""+animals.TransactionType +"\", "
-		OwnerId				:= "\"ownerId\":\""+REGULATOR+"\", "			//owner at the time of creation is always regulator. NOTE: this may have to change
+		//OwnerId				:= "\"ownerId\":\""+REGULATOR+"\", "			//owner at the time of creation is always regulator. NOTE: this may have to change
+		OwnerId				:= "\"ownerId\":\""+animals.OwnerId+"\", "			//owner at the time of creation is always regulator. NOTE: this may have to change
 		AssetId				:= "\"assetID\":\""+v5cID+"\", "				//NOTE:assetId changed to assetID based on UI developer request
 		MatnrAf				:= "\"matnrAf\":\""+ animals.MatnrAf +"\", "
 		PoDma				:= "\"poDma\":\""+ animals.PoDma +"\", "
