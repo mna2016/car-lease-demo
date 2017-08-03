@@ -606,7 +606,7 @@ func (t *SimpleChaincode) createAsset(stub shim.ChaincodeStubInterface, caller s
 		AfDmaTest			:= "\"afDmaTest\":\""+ animals.AfDmaTest +"\", "
 		DmaDelCert			:= "\"dmaDelCert\":\""+ animals.DmaDelCert +"\", "
 		AfDoc				:= "\"afDoc\":\""+ animals.AfDoc +"\", "
-		Caller				:= "\"caller\":\""+ "" +"\", "							//leaving caller blank for now
+		Caller				:= "\"caller\":\""+ "" +"\""							//leaving caller blank for now
 		v5c_ID         		:= "\"v5cID\":\""+v5cID+"\", "							// Variables to define the JSON
 
 	vehicle_json := "{"+v5c_ID+TransactionType+OwnerId+AssetId+MatnrAf+PoDma+PoSupp+DmaDelDate+AfDelDate+TruckMod+TruckPDate+TruckChnum+TruckEnnum+SuppTest+GrDma+GrAf+DmaMasdat+AfDmaTest+DmaDelCert+AfDoc+Caller+"}" 	// Concatenates the variables to create the total JSON object
